@@ -1,0 +1,72 @@
+[gd_scene load_steps=11 format=3 uid="uid://24gafsrelxnv"]
+
+[ext_resource type="Texture2D" uid="uid://blt8x8biboaqi" path="res://assets/sprites/aluminium_factory.png" id="1_1wkrb"]
+[ext_resource type="Texture2D" uid="uid://dapqict13j2ik" path="res://assets/sprites/buildings/aluminium.png" id="2_egbbc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_egbbc"]
+atlas = ExtResource("1_1wkrb")
+region = Rect2(0, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aidov"]
+atlas = ExtResource("1_1wkrb")
+region = Rect2(151, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lyd0v"]
+atlas = ExtResource("1_1wkrb")
+region = Rect2(302, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qsnkl"]
+atlas = ExtResource("1_1wkrb")
+region = Rect2(453, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngrsd"]
+atlas = ExtResource("1_1wkrb")
+region = Rect2(604, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3lobq"]
+atlas = ExtResource("1_1wkrb")
+region = Rect2(755, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2g0sg"]
+atlas = ExtResource("1_1wkrb")
+region = Rect2(906, 0, 151, 133)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3tv56"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_egbbc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aidov")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lyd0v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qsnkl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngrsd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3lobq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2g0sg")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="AluminiumFactory" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
+scale = Vector2(0.8, 0.8)
+sprite_frames = SubResource("SpriteFrames_3tv56")
+autoplay = "default"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_egbbc")

@@ -1,0 +1,56 @@
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://dv3sy4pan2ipm"]
+
+[ext_resource type="Material" uid="uid://bogk8vnwmbko4" path="res://shaders/buildable.tres" id="1_w10vi"]
+[ext_resource type="Material" uid="uid://cdp2p7n0x728i" path="res://shaders/not_buildable.tres" id="2_6g7l7"]
+[ext_resource type="Texture2D" uid="uid://crxho8kpy11bw" path="res://assets/tilesets/hexes.png" id="3_tlwix"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vy03s"]
+texture = ExtResource("3_tlwix")
+margins = Vector2i(0, 64)
+separation = Vector2i(0, 70)
+texture_region_size = Vector2i(512, 448)
+0:0/next_alternative_id = 6
+0:0/0 = 0
+0:0/2 = 2
+0:0/2/material = ExtResource("1_w10vi")
+0:0/3 = 3
+0:0/3/material = ExtResource("2_6g7l7")
+1:0/next_alternative_id = 4
+1:0/0 = 0
+1:0/2 = 2
+1:0/2/flip_v = true
+1:0/2/material = ExtResource("1_w10vi")
+1:0/3 = 3
+1:0/3/material = ExtResource("2_6g7l7")
+2:0/next_alternative_id = 4
+2:0/0 = 0
+2:0/2 = 2
+2:0/2/material = ExtResource("1_w10vi")
+2:0/3 = 3
+2:0/3/material = ExtResource("2_6g7l7")
+3:0/next_alternative_id = 4
+3:0/0 = 0
+3:0/2 = 2
+3:0/2/material = ExtResource("1_w10vi")
+3:0/3 = 3
+3:0/3/material = ExtResource("2_6g7l7")
+4:0/next_alternative_id = 4
+4:0/0 = 0
+4:0/1 = 1
+4:0/1/material = ExtResource("1_w10vi")
+4:0/3 = 3
+4:0/3/material = ExtResource("2_6g7l7")
+5:0/next_alternative_id = 4
+5:0/0 = 0
+5:0/2 = 2
+5:0/2/material = ExtResource("1_w10vi")
+5:0/3 = 3
+5:0/3/material = ExtResource("2_6g7l7")
+
+[resource]
+tile_shape = 3
+tile_offset_axis = 1
+tile_size = Vector2i(512, 448)
+custom_data_layer_0/name = "tint_mode"
+custom_data_layer_0/type = 2
+sources/0 = SubResource("TileSetAtlasSource_vy03s")

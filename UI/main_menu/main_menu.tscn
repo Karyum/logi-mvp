@@ -1,0 +1,87 @@
+[gd_scene load_steps=5 format=3 uid="uid://cnj5ybjxsc74i"]
+
+[ext_resource type="Script" uid="uid://dr5y033k5icy6" path="res://UI/main_menu/main_menu.gd" id="1_p8ccj"]
+
+[sub_resource type="Theme" id="Theme_5yyqw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5yyqw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p8ccj"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_5yyqw")
+script = ExtResource("1_p8ccj")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0669211, 0.320821, 0.509633, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.0
+offset_top = -121.5
+offset_right = 106.0
+offset_bottom = 121.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Name" type="TextEdit" parent="ColorRect/HBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 0
+placeholder_text = "Name:
+"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Host" type="Button" parent="ColorRect/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5yyqw")
+disabled = true
+text = "Host Game"
+
+[node name="Join" type="Button" parent="ColorRect/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+mouse_default_cursor_shape = 8
+theme_override_styles/focus = SubResource("StyleBoxEmpty_p8ccj")
+disabled = true
+text = "Join Game
+"
+
+[node name="TextEdit" type="TextEdit" parent="ColorRect/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "172.19.208.1"
+placeholder_text = "127.0.0.1"
+
+[node name="IP" type="Label" parent="ColorRect/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[connection signal="text_changed" from="ColorRect/HBoxContainer/Name" to="." method="_on_name_text_changed"]
+[connection signal="pressed" from="ColorRect/HBoxContainer/VBoxContainer/Host" to="." method="_on_host_pressed"]
+[connection signal="pressed" from="ColorRect/HBoxContainer/VBoxContainer/Join" to="." method="_on_join_pressed"]
+[connection signal="text_changed" from="ColorRect/HBoxContainer/VBoxContainer/TextEdit" to="." method="_on_text_edit_text_changed"]

@@ -1,0 +1,66 @@
+[gd_scene load_steps=10 format=3 uid="uid://b8fds0b1dbuxi"]
+
+[ext_resource type="Texture2D" uid="uid://blt8x8biboaqi" path="res://assets/sprites/aluminium_factory.png" id="1_6w83d"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lgtu7"]
+atlas = ExtResource("1_6w83d")
+region = Rect2(0, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d3h47"]
+atlas = ExtResource("1_6w83d")
+region = Rect2(151, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wc0sw"]
+atlas = ExtResource("1_6w83d")
+region = Rect2(302, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o6ch6"]
+atlas = ExtResource("1_6w83d")
+region = Rect2(453, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h0sep"]
+atlas = ExtResource("1_6w83d")
+region = Rect2(604, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p1st1"]
+atlas = ExtResource("1_6w83d")
+region = Rect2(755, 0, 151, 133)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i3828"]
+atlas = ExtResource("1_6w83d")
+region = Rect2(906, 0, 151, 133)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h0xft"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lgtu7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d3h47")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wc0sw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o6ch6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h0sep")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p1st1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i3828")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="DevScene" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_h0xft")
+frame_progress = 0.6052

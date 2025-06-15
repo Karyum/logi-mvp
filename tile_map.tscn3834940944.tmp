@@ -1,0 +1,41 @@
+[gd_scene load_steps=7 format=3 uid="uid://sk6f0pf3brbe"]
+
+[ext_resource type="Texture2D" uid="uid://cblhmqray5j6l" path="res://hex_grid.png" id="1_1n30v"]
+[ext_resource type="Script" uid="uid://bedcifpfhoiv6" path="res://tile_map_controller.gd" id="2_35kre"]
+[ext_resource type="Texture2D" uid="uid://bjfiyjmbbp35s" path="res://icon.svg" id="3_35kre"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_03na7"]
+texture = ExtResource("1_1n30v")
+margins = Vector2i(9, 8)
+separation = Vector2i(18, 0)
+texture_region_size = Vector2i(110, 96)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_xftlc"]
+tile_shape = 3
+tile_offset_axis = 1
+tile_size = Vector2i(102, 94)
+sources/0 = SubResource("TileSetAtlasSource_03na7")
+
+[sub_resource type="Curve2D" id="Curve2D_1n30v"]
+
+[node name="TileMap" type="TileMap"]
+z_index = 2
+position = Vector2(111, 79)
+tile_set = SubResource("TileSet_xftlc")
+format = 2
+layer_0/z_index = -1
+layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 1, 0, 0, 65538, 65536, 0, 3, 65536, 0, 4, 65536, 0, 65540, 65536, 0, 131076, 0, 0, 65539, 65536, 0, 65537, 65536, 0, 131073, 65536, 0, 196610, 65536, 0, 131075, 65536, 0, 131074, 65536, 0, 131071, 131072, 0, 131072, 131072, 0, 196607, 131072, 0, 196608, 131072, 0, 262144, 131072, 0, 262145, 131072, 0, 262146, 0, 0, 262147, 0, 0, 196611, 0, 0, 196612, 0, 0, 196609, 131072, 0, 65541, 0, 0, 65542, 0, 0, 6, 0, 0, 5, 0, 0, 131077, 0, 0, 65543, 0, 0, 131078, 0, 0, 196614, 0, 0, 196613, 0, 0, 7, 0, 0, -65529, 0, 0)
+script = ExtResource("2_35kre")
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_1n30v")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="Path2D/PathFollow2D"]
+visible = false
+scale = Vector2(0.3, 0.3)
+texture = ExtResource("3_35kre")

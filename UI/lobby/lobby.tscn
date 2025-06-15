@@ -1,0 +1,72 @@
+[gd_scene load_steps=6 format=3 uid="uid://bi5qri8kykst"]
+
+[ext_resource type="Script" uid="uid://jvddmqer4u07" path="res://UI/lobby/lobby.gd" id="1_u8a4o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c5o3s"]
+
+[sub_resource type="Theme" id="Theme_wloxn"]
+Button/styles/focus = SubResource("StyleBoxEmpty_c5o3s")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u8a4o"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mvsv2"]
+
+[node name="Lobby" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_u8a4o")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0666667, 0.321569, 0.509804, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -20.0
+offset_right = 48.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 40
+
+[node name="PlayerList" type="VBoxContainer" parent="ColorRect/VBoxContainer"]
+layout_mode = 2
+
+[node name="Start" type="Button" parent="ColorRect/VBoxContainer"]
+visible = false
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme = SubResource("Theme_wloxn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_u8a4o")
+text = "Start Game"
+
+[node name="BackToMainMenu" type="Button" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_top = 0.03
+anchor_right = 0.01
+anchor_bottom = 0.03
+offset_right = 158.0
+offset_bottom = 31.0
+mouse_default_cursor_shape = 2
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mvsv2")
+text = "Back to main menu"
+
+[connection signal="pressed" from="ColorRect/VBoxContainer/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="ColorRect/BackToMainMenu" to="." method="_on_back_to_main_menu_pressed"]

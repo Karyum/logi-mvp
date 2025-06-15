@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="MapConfiguration" load_steps=5 format=3 uid="uid://b1n5vjlxlcufi"]
+
+[ext_resource type="Script" uid="uid://b4nj7scskrn2h" path="res://scripts/resources/map_configuration.gd" id="1_iqanx"]
+[ext_resource type="Script" uid="uid://cutxxo2x6h45o" path="res://scripts/resources/terratory.gd" id="2_vm5cj"]
+
+[sub_resource type="Resource" id="Resource_bemcd"]
+script = ExtResource("2_vm5cj")
+terratory_hexes = Array[Vector2i]([Vector2i(2, 2), Vector2i(1, 1), Vector2i(2, 1), Vector2i(3, 1), Vector2i(3, 2), Vector2i(2, 3), Vector2i(1, 2), Vector2i(1, 0)])
+metadata/_custom_type_script = "uid://cutxxo2x6h45o"
+
+[sub_resource type="Resource" id="Resource_vm5cj"]
+script = ExtResource("2_vm5cj")
+terratory_hexes = Array[Vector2i]([Vector2i(9, 8), Vector2i(10, 9), Vector2i(9, 9), Vector2i(8, 9), Vector2i(8, 8), Vector2i(9, 7), Vector2i(10, 8), Vector2i(10, 7), Vector2i(10, 9), Vector2i(7, 9)])
+metadata/_custom_type_script = "uid://cutxxo2x6h45o"
+
+[resource]
+script = ExtResource("1_iqanx")
+starting_positions = Array[Vector2i]([Vector2i(2, 2), Vector2i(9, 8)])
+terratories_hexes = Array[ExtResource("2_vm5cj")]([SubResource("Resource_bemcd"), SubResource("Resource_vm5cj")])
+max_zoom = 1.0
+min_zoom = 0.5

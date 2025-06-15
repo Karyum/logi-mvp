@@ -1,0 +1,132 @@
+[gd_scene load_steps=6 format=3 uid="uid://c6rr0laopmbai"]
+
+[ext_resource type="Script" uid="uid://cewj3keo8krmk" path="res://UI/hud/hud.gd" id="1_ne75i"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ne75i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ne75i"]
+bg_color = Color(0.577008, 0.577008, 0.577008, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_bytes"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2o5uh"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_ne75i")
+drawers_animation_speed = 0.25
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -51.0
+offset_right = 88.0
+grow_vertical = 0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="BuildButton" type="Button" parent="MarginContainer"]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_default_cursor_shape = 2
+theme_override_constants/outline_size = 0
+theme_override_styles/focus = SubResource("StyleBoxEmpty_ne75i")
+action_mode = 0
+text = "Build
+"
+
+[node name="BuildingDrawer" type="Panel" parent="."]
+anchors_preset = -1
+anchor_left = -0.25
+anchor_bottom = 1.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ne75i")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BuildingDrawer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="CloseWrapper" type="MarginContainer" parent="BuildingDrawer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 20
+
+[node name="CloseBuildDrawer" type="Button" parent="BuildingDrawer/VBoxContainer/CloseWrapper"]
+layout_mode = 2
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_bytes")
+text = "  X  "
+
+[node name="BuildingsButtons" type="VBoxContainer" parent="BuildingDrawer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 50
+
+[node name="SteelFactoryButtonWrapper" type="MarginContainer" parent="BuildingDrawer/VBoxContainer/BuildingsButtons"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = 10
+
+[node name="SteelFactoryButton" type="Button" parent="BuildingDrawer/VBoxContainer/BuildingsButtons/SteelFactoryButtonWrapper"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2o5uh")
+text = "Steel Factory"
+metadata/_edit_use_anchors_ = true
+
+[node name="AluminiumFactoryButtonWrapper" type="MarginContainer" parent="BuildingDrawer/VBoxContainer/BuildingsButtons"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = 10
+
+[node name="AluminiumFactoryButton" type="Button" parent="BuildingDrawer/VBoxContainer/BuildingsButtons/AluminiumFactoryButtonWrapper"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2o5uh")
+text = "Aluminium Factory"
+metadata/_edit_use_anchors_ = true
+
+[node name="BioFactoryWrapper" type="MarginContainer" parent="BuildingDrawer/VBoxContainer/BuildingsButtons"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/margin_left = 10
+
+[node name="BioFactoryButton" type="Button" parent="BuildingDrawer/VBoxContainer/BuildingsButtons/BioFactoryWrapper"]
+layout_mode = 2
+size_flags_horizontal = 0
+mouse_default_cursor_shape = 2
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_2o5uh")
+text = "Bio Factory"
+metadata/_edit_use_anchors_ = true
+
+[node name="Status" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+
+[connection signal="pressed" from="MarginContainer/BuildButton" to="." method="_on_build_button_pressed"]
+[connection signal="pressed" from="BuildingDrawer/VBoxContainer/CloseWrapper/CloseBuildDrawer" to="." method="_on_close_build_drawer_pressed"]
+[connection signal="pressed" from="BuildingDrawer/VBoxContainer/BuildingsButtons/SteelFactoryButtonWrapper/SteelFactoryButton" to="." method="_on_steel_factory_button_pressed"]
+[connection signal="pressed" from="BuildingDrawer/VBoxContainer/BuildingsButtons/AluminiumFactoryButtonWrapper/AluminiumFactoryButton" to="." method="_on_aluminium_factory_button_pressed"]
+[connection signal="pressed" from="BuildingDrawer/VBoxContainer/BuildingsButtons/BioFactoryWrapper/BioFactoryButton" to="." method="_on_bio_factory_button_pressed"]

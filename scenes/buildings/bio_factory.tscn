@@ -1,0 +1,93 @@
+[gd_scene load_steps=14 format=3 uid="uid://ek8irwxlus1h"]
+
+[ext_resource type="Texture2D" uid="uid://cnedamaxr4804" path="res://assets/sprites/bio_factory.png" id="1_yb2lh"]
+[ext_resource type="Texture2D" uid="uid://d4dmo7jjkfaal" path="res://assets/sprites/buildings/bio.png" id="2_u5kve"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5kve"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ojy4s"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_km258"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3oq2v"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5ycao"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ju53a"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(640, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gahx8"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(768, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bj0am"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(896, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bux7v"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(1024, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v021b"]
+atlas = ExtResource("1_yb2lh")
+region = Rect2(1152, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_io8ah"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u5kve")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ojy4s")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_km258")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3oq2v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5ycao")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ju53a")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gahx8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bj0am")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bux7v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v021b")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="BioFactory" type="Node2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_io8ah")
+autoplay = "default"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_u5kve")
