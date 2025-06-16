@@ -6,7 +6,7 @@ var steel_factory: PackedScene = preload("res://scenes/buildings/steel_factory.t
 @onready var tree = get_tree()
 
 signal factory_placed(player_id: int, hex_pos: Vector2)
-signal terratory_data_loaded(player_id: int)
+signal territory_data_loaded(player_id: int)
 
 #var starting_positions: Array[Vector2] = [Vector2(2, 2), Vector2(23, 21)]
 var territories: Dictionary = {}  # hex_pos -> player_id (who controls this hex)
@@ -76,7 +76,7 @@ func place_factory_rpc(placing_player_id: int, factory_type: String, hex_pos: Ve
 
 # Assign starting territory to a player
 func assign_starting_territory():
-	var map_terratories: Array[TerratoryResource] = GameState.map.terratories_hexes.duplicate()
+	var map_territories: Array[TerritoryResource] = GameState.map.territories_hexes.duplicate()
 	var players_ids = GameState.players.keys().duplicate()
 	var starting_positions = GameState.map.starting_positions.duplicate()
 
@@ -91,21 +91,23 @@ func assign_starting_territory():
 			sync_starting_position_rpc.rpc_id(player_id, player_start_position)
 		else:
 			starting_position = player_start_position
-
-		for hex_pos in map_terratories[index].terratory_hexes:
+		
+		for hex_pos in map_territories[index].territory_hexes:
 			territories[hex_pos] = player_id
+		
+		map_territories.remove_at(index)
 	
 	# Sync territory changes to all clients
 	sync_starting_territory_rpc.rpc(territories)
 	if NetworkManager.is_host:
-		terratory_data_loaded.emit(NetworkManager.player_id)
+		territory_data_loaded.emit(NetworkManager.player_id)
 
 		
 # RPC to sync territory changes
 @rpc("authority", "call_remote", "reliable")
 func sync_starting_territory_rpc(new_territories: Dictionary):
 	territories = new_territories
-	terratory_data_loaded.emit(NetworkManager.player_id)
+	territory_data_loaded.emit(NetworkManager.player_id)
 	
 @rpc("authority", "call_remote", "reliable")
 func sync_starting_position_rpc(new_starting_position: Vector2i):

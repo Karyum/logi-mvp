@@ -4,6 +4,8 @@ extends Node
 
 var current_map : TileMapLayer
 var astar = AStar2D.new()
+var cell_size_x = 120
+var cell_size_y = 138
 
 ## Initial function that binds a [TileMapLayer] to the navigation class
 func set_current_map(map : TileMapLayer):
@@ -18,7 +20,7 @@ func add_all_point():
 	var all_used_cells = current_map.get_used_cells()
 	for cell in all_used_cells:
 		var next_id := astar.get_available_point_id()
-		print(get_cell_custom_data(cell, "prevent_click"))
+
 		if not get_cell_custom_data(cell, "prevent_click"):
 			astar.add_point(next_id, cell)
 
@@ -27,7 +29,7 @@ func add_all_point():
 		var all_possible_neighbors = current_map.get_surrounding_cells(pos)
 		var valid_neighbor = []
 		for neighbor in all_possible_neighbors:
-			if current_map.get_cell_source_id(neighbor) != -1: #if the cell is not empty
+			if current_map.get_cell_source_id(neighbor) != -1 and not get_cell_custom_data(neighbor, "prevent_click"): #if the cell is not empty
 				valid_neighbor.append(neighbor)
 		for neighbor in valid_neighbor:
 			var neighbor_id = astar.get_closest_point(neighbor)
@@ -154,6 +156,62 @@ func get_all_tile_with_layer(custom_data_name: String, value: Variant) -> Array[
 			valid_tiles.append(tile)
 	return valid_tiles
 
-## Returns a random tile from the registered tile set
-func get_random_tile_pos() -> Vector2: #for testing and placeholder purposes
-	return astar.get_point_position(randi_range(0, astar.get_point_count()-1))
+func get_front_line_points(player_territory: Array[Vector2i]) -> Array[Vector2]:
+	var frontline_hexes = []
+	var frontline_points: Array[Vector2] = []
+	
+	for pos in player_territory:
+		var all_possible_neighbors = current_map.get_surrounding_cells(pos)
+		
+		for neighbor in all_possible_neighbors:
+			var does_cell_exist = current_map.get_cell_source_id(neighbor) != -1
+			var is_cell_clickable = not get_cell_custom_data(neighbor, "prevent_click")
+			var is_already_owned_cell = player_territory.has(neighbor)
+			var is_in_frontline = frontline_hexes.has(neighbor)
+
+			if  does_cell_exist and is_cell_clickable and not is_already_owned_cell and not is_in_frontline: #if the cell is not empty
+				var direction: Vector2 = pos - neighbor
+				var global_pos = cell_to_global(pos)
+				var point1 = Vector2.ZERO
+				var point2 = Vector2.ZERO
+				
+				var is_even_row = pos.y % 2 == 0
+				
+				match direction:
+					Vector2(1, 0): # Left neighbor
+						point1 = global_pos - Vector2(cell_size_x / 2, cell_size_y / 4)
+						point2 = global_pos - Vector2(cell_size_x / 2, -cell_size_y / 4)
+					Vector2(-1, 0): # Right neighbor
+						point1 = global_pos + Vector2(cell_size_x / 2, -cell_size_y / 4)
+						point2 = global_pos + Vector2(cell_size_x / 2, cell_size_y / 4)
+					Vector2(0, 1): # Top-left neighbor
+						if is_even_row:
+							point1 = global_pos + Vector2(0, -cell_size_y / 2)
+							point2 = global_pos + Vector2(cell_size_x / 2, -cell_size_y / 4)
+						else:
+							point1 = global_pos + Vector2(-cell_size_x / 2, -cell_size_y / 4)
+							point2 = global_pos + Vector2(0, -cell_size_y / 2)
+					Vector2(0, -1): # Bottom-right neighbor
+						if is_even_row:
+							point1 = global_pos + Vector2(0, cell_size_y / 2)
+							point2 = global_pos + Vector2(cell_size_x / 2, cell_size_y / 4)
+						else:
+							point1 = global_pos + Vector2(-cell_size_x / 2, cell_size_y / 4)
+							point2 = global_pos + Vector2(0, cell_size_y / 2)
+					Vector2(1, 1): # Top-right neighbor
+						point1 = global_pos + Vector2(0, -cell_size_y / 2)
+						point2 = global_pos + Vector2(-cell_size_x / 2, -cell_size_y / 4)
+					Vector2(1, -1): # Bottom-left neighbor 
+						point1 = global_pos + Vector2(-cell_size_x / 2, cell_size_y / 4)
+						point2 = global_pos + Vector2(0, cell_size_y / 2)
+					Vector2(-1, 1): # Already handled correctly
+						point1 = global_pos + Vector2(0, -cell_size_y / 2)
+						point2 = global_pos + Vector2(cell_size_x / 2, -cell_size_y / 4)
+					Vector2(-1, -1): # Already handled correctly
+						point1 = global_pos + Vector2(0, cell_size_y / 2)
+						point2 = global_pos + Vector2(cell_size_x / 2, cell_size_y / 4)
+
+				frontline_points.append(point1)
+				frontline_points.append(point2)
+				
+	return frontline_points

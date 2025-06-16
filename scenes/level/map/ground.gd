@@ -3,8 +3,8 @@ extends TileMapLayer
 
 var route: PackedScene = preload("res://scenes/transport/route.tscn")
 
-
 @onready var HUD: CanvasLayer = $"../../HUD"
+@onready var map_parent = $".."
 
 var start_point = null
 var choosing_building_tile = false
@@ -13,6 +13,7 @@ var routes_end_points = []
 	
 func _ready():
 	HexNavi.set_current_map(self)
+	HUD.on_building_factory.connect(_on_hud_on_building_factory)
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton:
@@ -20,9 +21,9 @@ func _unhandled_input(event):
 			var global_clicked = get_global_mouse_position()
 			var pos_clicked = local_to_map(to_local(global_clicked))
 			var tile_data = self.get_cell_tile_data(pos_clicked)
-				
-			#if (tile_data.get_custom_data("prevent_click")):
-				#return
+			
+			if tile_data.get_custom_data("prevent_click"):
+				return
 			
 			if choosing_building_tile:
 				choosing_building_tile = false
@@ -51,6 +52,9 @@ func _on_hud_on_building_factory(type: String) -> void:
 	choosing_building_tile = true
 	buildingType = type
 	
-func build_terratory(player_terratory: Array[Vector2i]):
-	print('build_terratory', player_terratory)
-	pass
+func build_territory(player_territory: Array[Vector2i]):
+	# Also draw territory border
+	
+	var frontline_points = HexNavi.get_front_line_points(player_territory)
+	print('map_frontline_points ', frontline_points)
+	map_parent.frontline_points = frontline_points

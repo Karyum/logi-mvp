@@ -1,6 +1,6 @@
 extends Control
 
-var loaded_terratories = 1
+var loaded_territories = 1
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -11,14 +11,14 @@ func _ready() -> void:
 			NetworkManager.host_game()
 		elif arg == 'client':
 			var player_data = NetworkManager.join_game(NetworkManager.get_local_ip())
-			await get_tree().create_timer(0.25).timeout
+			await get_tree().create_timer(0.35).timeout
 			GameState.add_player(player_data['player_id'], 'client')
 			GameState.add_player(1, 'Host')
 	
 	# DEV ONLY
 	NetworkManager.player_joined_lobby.connect(_on_player_joined_lobby)
 	
-	TerritoryManager.terratory_data_loaded.connect(_on_player_terratory_loaded)
+	TerritoryManager.territory_data_loaded.connect(_on_player_territory_loaded)
 	GameState.game_started.connect(_on_game_started)
 	
 	# on ready call the TerritoryManager.assign_starting_territory function as a start
@@ -26,7 +26,7 @@ func _ready() -> void:
 	# as if looking at the other player
 	if NetworkManager.is_host:
 		# DEV ONLY 
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(1).timeout
 		
 		TerritoryManager.assign_starting_territory()
 
@@ -35,8 +35,8 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	pass
 	
-func _on_player_terratory_loaded(_player_id: int):
-	loaded_terratories += 1
+func _on_player_territory_loaded(_player_id: int):
+	loaded_territories += 1
 	update_progress()
 	
 func _on_player_joined_lobby(player_id: int, player_name: String):
@@ -47,7 +47,7 @@ func update_progress():
 	var total_checks: int = 1
 	var players_amount = GameState.players.keys().size()
 	
-	if loaded_terratories == 2:
+	if loaded_territories == players_amount:
 		value = int(100 / total_checks)
 	
 		
