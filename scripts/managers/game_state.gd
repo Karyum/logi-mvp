@@ -8,34 +8,64 @@ signal game_time_updated(new_time: float)
 signal game_started()
 #signal game_paused()
 #signal game_resumed()
+signal game_battle_turn_started()
+
+var game_timer: Timer = null
 
 # Game state variables
 var game_id: String = ""
-var game_time: float = 0.0
+var game_time: int = 1
 var game_speed: float = 1.0
 var is_paused: bool = false
 var game_started_flag: bool = false
-var map: MapConfiguration = preload("res://scenes/maps/dev_map.tres")
+var game_battle_turn: int = 0
+#var map: Resource = preload("res://scenes/maps/dev_map.tres")
+var map: MapConfiguration = load("res://scenes/maps/dev_map_small.tres")
 
 # Player data
 var players: Dictionary = {}
 
+var last_emit_ms = 0
+
 func _ready():
 	set_process(true)
 
-func _process(delta):
+
+func _process(_delta):
 	if not game_started_flag or is_paused:
 		return
+		
+func create_timer():
+	game_timer = Timer.new()
+	game_timer.wait_time = 1.0
+	game_timer.timeout.connect(_on_timer_timeout)
+	add_child(game_timer)
+	game_timer.start()
+
+func _on_timer_timeout():
+	game_time += 1
 	
-	# Update game time
-	game_time += delta * game_speed
+	# Host gets it immediately
 	game_time_updated.emit(game_time)
+	
+	# Clients get it shortly after (network latency)
+	send_game_timer.rpc(game_time)
+	
+	if game_time / 10 > game_battle_turn:
+		game_battle_turn += 1
+		game_battle_turn_started.emit()
+		send_game_battle_turn.rpc(game_battle_turn)
+		
+	game_timer.start()
+		
 
 # Game control functions
 func start_game():
 	game_started_flag = true
 	is_paused = false
 	game_started.emit()
+	if NetworkManager.is_host:
+		create_timer()
 
 func pause_game():
 	if not NetworkManager.is_host:
@@ -44,21 +74,21 @@ func pause_game():
 	is_paused = true
 	NetworkManager.sync_game_control("pause")
 	#game_paused.emit()
-#
-#func resume_game():
-	#if not NetworkManager.is_host:
-		#return
-	#
-	#is_paused = false
-	#NetworkManager.sync_game_control("resume")
+
+func resume_game():
+	if not NetworkManager.is_host:
+		return
+	
+	is_paused = false
+	NetworkManager.sync_game_control("resume")
 	#game_resumed.emit()
-#
-#func set_game_speed(speed: float):
-	#if not NetworkManager.is_host:
-		#return
-	#
-	#game_speed = clamp(speed, 0.25, 5.0)
-	#NetworkManager.sync_game_speed(game_speed)
+
+func set_game_speed(speed: float):
+	if not NetworkManager.is_host:
+		return
+	
+	game_speed = clamp(speed, 0.25, 5.0)
+	NetworkManager.sync_game_speed(game_speed)
 
 # Player management
 func add_player(id: int, player_name: String):
@@ -73,8 +103,6 @@ func add_player(id: int, player_name: String):
 		}
 	}
 	
-	# Tell territory manager to assign starting territory
-	#TerritoryManager.assign_starting_territory(id)
 	game_state_updated.emit()
 	print("Player added: ", player_name, " (ID: ", id, ")")
 
@@ -110,3 +138,15 @@ func load_game_data(data: Dictionary):
 	game_started_flag = data.get("game_started", false)
 	players = data.get("players", {})
 	game_state_updated.emit()
+
+
+# NETWORK
+@rpc("authority", "call_remote", "reliable")
+func send_game_timer(new_game_time: int):
+	game_time = new_game_time
+	game_time_updated.emit(new_game_time)
+	
+@rpc("authority", "call_remote", "reliable")
+func send_game_battle_turn(new_game_battle_turn: int):
+	game_battle_turn = new_game_battle_turn
+	game_battle_turn_started.emit()

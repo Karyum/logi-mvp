@@ -11,6 +11,8 @@ signal player_joined_lobby(player_id: int, player_name: String)
 signal player_left_lobby(player_id: int)
 signal lobby_updated(players: Dictionary)
 
+signal loading_screen_part_loaded(check_name: String, player_id: int)
+
 # Network state
 var multiplayer_peer: MultiplayerPeer
 var is_host: bool = false
@@ -56,7 +58,7 @@ func host_game(port: int = 7000, player_name: String = 'Potato Host'):
 	
 	# Add host as first player
 	GameState.add_player(1, "Host")
-	print("Game hosted on port ", get_local_ip(), ":", port)
+	#print("Game hosted on port ", get_local_ip(), ":", port)
 
 # Join a game
 func join_game(ip: String = "127.0.0.1", port: int = 7000, player_name: String = "Player") -> Dictionary:
@@ -68,6 +70,7 @@ func join_game(ip: String = "127.0.0.1", port: int = 7000, player_name: String =
 	# Store player name for when we connect
 	set_meta("pending_player_name", player_name)
 	print("Attempting to join game at ", ip, ":", port)
+	
 	return {
 		'player_name': player_name,
 		'player_id': multiplayer_peer.get_unique_id()
@@ -124,6 +127,7 @@ func start_game_from_lobby():
 		var player_data = lobby_players[lobby_player_id]
 		GameState.add_player(lobby_player_id, player_data["name"])
 	
+	sync_full_game_state()
 	# Start the game
 	sync_game_control("start")
 	
@@ -146,21 +150,19 @@ func sync_game_control(action: String):
 func sync_game_control_rpc(action: String):
 	match action:
 		"start":
-			GameState.game_started_flag = true
-			GameState.is_paused = false
 			GameState.start_game()
 		"pause":
-			GameState.is_paused = true
+			GameState.pause_game()
 		"resume":
-			GameState.is_paused = false
+			GameState.resume_game()
 
 # Sync game speed
-#func sync_game_speed(speed: float):
-	#sync_game_speed_rpc.rpc(speed)
-#
-#@rpc("authority", "call_local", "reliable")
-#func sync_game_speed_rpc(speed: float):
-	#GameState.game_speed = speed
+func sync_game_speed(speed: float):
+	sync_game_speed_rpc.rpc(speed)
+
+@rpc("authority", "call_local", "reliable")
+func sync_game_speed_rpc(speed: float):
+	GameState.game_speed = speed
 
 # Sync entire game state to all clients
 func sync_full_game_state():
@@ -171,7 +173,7 @@ func sync_full_game_state():
 	#sync_full_state_rpc.rpc(game_data, territory_data, production_data)
 	sync_full_state_rpc.rpc(game_data)
 
-@rpc("authority", "call_local", "reliable")
+@rpc("authority", "call_remote", "reliable")
 #func sync_full_state_rpc(game_data: Dictionary, territory_data: Dictionary, _production_data: Dictionary):
 func sync_full_state_rpc(game_data: Dictionary):
 	GameState.load_game_data(game_data)
@@ -220,13 +222,13 @@ func _on_connected_to_server():
 	
 	# Request to join lobby with our name
 	var player_name = get_meta("pending_player_name", "Player")
-	request_join_lobby.rpc_id(1, player_id, player_name)  # Send to host
+	join_lobby.rpc_id(1, player_id, player_name)  # Send to host
 	
 	connected_to_server.emit()
 
 # RPC for client to request joining lobby
 @rpc("any_peer", "call_local", "reliable")
-func request_join_lobby(id: int, player_name: String):
+func join_lobby(id: int, player_name: String):
 	if is_host:
 		add_player_to_lobby(id, player_name)
 		sync_lobby_state()
@@ -238,3 +240,12 @@ func _on_connection_failed():
 @rpc('authority', 'call_local', 'reliable')
 func go_to_loading_rpc():
 	get_tree().change_scene_to_file("res://UI/loading_screen/loading_screen.tscn")
+
+@rpc('any_peer', 'call_remote', 'reliable')
+func loading_screen_part_loaded_rpc(check_name: String, loaded_player_id: int):
+	print({
+		'p1': player_id,
+		'p2': loaded_player_id,
+		'check_name': check_name
+	})
+	loading_screen_part_loaded.emit(check_name, loaded_player_id)

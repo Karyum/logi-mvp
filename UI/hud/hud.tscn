@@ -125,6 +125,37 @@ offset_right = 20.0
 offset_bottom = 23.0
 grow_horizontal = 2
 
+[node name="TimeContainer" type="HBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.98
+anchor_right = 0.98
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+
+[node name="Game time" type="Label" parent="TimeContainer"]
+layout_mode = 2
+text = "Game Time: "
+
+[node name="Time" type="Label" parent="TimeContainer"]
+layout_mode = 2
+text = "00:00:00"
+
+[node name="TruckContainer" type="HBoxContainer" parent="."]
+anchors_preset = -1
+anchor_left = 0.02
+anchor_right = 0.02
+offset_right = 165.0
+offset_bottom = 40.0
+
+[node name="Game time" type="Label" parent="TruckContainer"]
+layout_mode = 2
+text = "Trucks: "
+
+[node name="Amount" type="Label" parent="TruckContainer"]
+layout_mode = 2
+text = "0x"
+
 [connection signal="pressed" from="MarginContainer/BuildButton" to="." method="_on_build_button_pressed"]
 [connection signal="pressed" from="BuildingDrawer/VBoxContainer/CloseWrapper/CloseBuildDrawer" to="." method="_on_close_build_drawer_pressed"]
 [connection signal="pressed" from="BuildingDrawer/VBoxContainer/BuildingsButtons/SteelFactoryButtonWrapper/SteelFactoryButton" to="." method="_on_steel_factory_button_pressed"]

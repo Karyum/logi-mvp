@@ -8,7 +8,7 @@ var start_moving: bool = false
 
 func _process(delta):
 	if start_moving:
-		follower.progress += 50 * delta 
+		follower.progress += 40 * delta 
 	#$Path/PathFollow2D/Sprite2D.rotation = follower.rotation
 	
 func create_route(path: Array):

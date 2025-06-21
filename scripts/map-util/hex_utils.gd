@@ -62,7 +62,7 @@ func global_to_cell(global_pos : Vector2) -> Vector2i: #returns local cell posit
 		return Vector2i(-999, -999)
 	return closest_cell 
 
-## Returns the cell position that is closest to a given global position; similar to [method HexNavi.global_to_cell()] but always returns a valid cell position.
+## Returns the cell position that is closest to a given global position; similar to [method HexUtil.global_to_cell()] but always returns a valid cell position.
 func get_closest_cell_by_global_pos(global_pos : Vector2) -> Vector2i:
 	var local_map_pos := current_map.local_to_map(current_map.to_local(global_pos))
 	var closest_point_id = astar.get_closest_point(local_map_pos)
@@ -122,12 +122,12 @@ func get_distance(pos1: Vector2i, pos2: Vector2i) -> int:
 	return all_points.size() - 1 #excluding the first point
 
 ## Returns all neighbor cells of a given cell at [param start_pos] within [param range].
-func get_all_neighbors_in_range(start_pos: Vector2i, range: int, max_weight: float = 1) -> Array[Vector2i]:
+func get_all_neighbors_in_range(start_pos: Vector2i, hex_range: int, max_weight: float = 1) -> Array[Vector2i]:
 	#returns an array of cell ID
 	#employs a depth first search
 	var all_neighbors_id : Array[int] = []
 	var starting_cell_id = tile_to_id(start_pos)
-	_dfs(range, starting_cell_id, starting_cell_id, all_neighbors_id, max_weight)
+	_dfs(hex_range, starting_cell_id, starting_cell_id, all_neighbors_id, max_weight)
 	var all_neighbors_pos = all_neighbors_id.map(id_to_tile)
 	var answer: Array[Vector2i]
 	answer.assign(all_neighbors_pos)
@@ -156,62 +156,113 @@ func get_all_tile_with_layer(custom_data_name: String, value: Variant) -> Array[
 			valid_tiles.append(tile)
 	return valid_tiles
 
-func get_front_line_points(player_territory: Array[Vector2i]) -> Array[Vector2]:
-	var frontline_hexes = []
-	var frontline_points: Array[Vector2] = []
+func get_front_line_points() -> Dictionary:
+	var players_territories = TerritoryManager.territories
+	var players_frontlines: Dictionary = {}
 	
-	for pos in player_territory:
-		var all_possible_neighbors = current_map.get_surrounding_cells(pos)
+	var players_territories_flipped: Dictionary = {}
+
+	for pos in players_territories.keys():
+		var player_id = players_territories[pos]
+		if players_territories_flipped.has(player_id):
+			players_territories_flipped[player_id].append(pos)
+		else:
+			players_territories_flipped[player_id] = [pos]
+	
+	for player_id in players_territories_flipped.keys():
+		var player_territory = players_territories_flipped[player_id]
+		var frontline_points: Array[Vector2] = []
+		
+		for pos in player_territory:
+			var all_possible_neighbors = current_map.get_surrounding_cells(pos)
+			
+			for neighbor in all_possible_neighbors:
+				var does_cell_exist = current_map.get_cell_source_id(neighbor) != -1
+				var is_cell_clickable = not get_cell_custom_data(neighbor, "prevent_click")
+				var is_already_owned_cell = player_territory.has(neighbor)
+
+				if  does_cell_exist and is_cell_clickable and not is_already_owned_cell: #if the cell is not empty
+					var direction: Vector2 = pos - neighbor
+					var global_pos = cell_to_global(pos)
+					var point1 = Vector2.ZERO
+					var point2 = Vector2.ZERO
+					
+					var is_even_row = pos.y % 2 == 0
+					
+					match direction:
+						Vector2(1, 0): # Left neighbor
+							point1 = global_pos - Vector2(cell_size_x / 2, cell_size_y / 4)
+							point2 = global_pos - Vector2(cell_size_x / 2, -cell_size_y / 4)
+						Vector2(-1, 0): # Right neighbor
+							point1 = global_pos + Vector2(cell_size_x / 2, -cell_size_y / 4)
+							point2 = global_pos + Vector2(cell_size_x / 2, cell_size_y / 4)
+						Vector2(0, 1): # Top-left neighbor
+							if is_even_row:
+								point1 = global_pos + Vector2(0, -cell_size_y / 2)
+								point2 = global_pos + Vector2(cell_size_x / 2, -cell_size_y / 4)
+							else:
+								point1 = global_pos + Vector2(-cell_size_x / 2, -cell_size_y / 4)
+								point2 = global_pos + Vector2(0, -cell_size_y / 2)
+						Vector2(0, -1): # Bottom-right neighbor
+							if is_even_row:
+								point1 = global_pos + Vector2(0, cell_size_y / 2)
+								point2 = global_pos + Vector2(cell_size_x / 2, cell_size_y / 4)
+							else:
+								point1 = global_pos + Vector2(-cell_size_x / 2, cell_size_y / 4)
+								point2 = global_pos + Vector2(0, cell_size_y / 2)
+						Vector2(1, 1): # Top-right neighbor
+							point1 = global_pos + Vector2(0, -cell_size_y / 2)
+							point2 = global_pos + Vector2(-cell_size_x / 2, -cell_size_y / 4)
+						Vector2(1, -1): # Bottom-left neighbor 
+							point1 = global_pos + Vector2(-cell_size_x / 2, cell_size_y / 4)
+							point2 = global_pos + Vector2(0, cell_size_y / 2)
+						Vector2(-1, 1): # Already handled correctly
+							point1 = global_pos + Vector2(0, -cell_size_y / 2)
+							point2 = global_pos + Vector2(cell_size_x / 2, -cell_size_y / 4)
+						Vector2(-1, -1): # Already handled correctly
+							point1 = global_pos + Vector2(0, cell_size_y / 2)
+							point2 = global_pos + Vector2(cell_size_x / 2, cell_size_y / 4)
+
+					frontline_points.append(point1)
+					frontline_points.append(point2)
+		
+		players_frontlines[player_id] = frontline_points
+	
+	return players_frontlines
+
+func get_next_hex():
+	var players_territories = TerritoryManager.territories
+	var player_territory = []
+	
+	for pos in players_territories.keys():
+		var player_id = players_territories[pos]
+		
+		if player_id == NetworkManager.player_id:
+			player_territory.append(pos)
+			
+	# If player has no territory, return invalid position
+	if player_territory.is_empty():
+		return Vector2i(-999, -999)
+	
+	# Find all adjacent cells that can be conquered
+	var conquest_candidates = []
+	
+	for owned_pos in player_territory:
+		var all_possible_neighbors = current_map.get_surrounding_cells(owned_pos)
 		
 		for neighbor in all_possible_neighbors:
 			var does_cell_exist = current_map.get_cell_source_id(neighbor) != -1
 			var is_cell_clickable = not get_cell_custom_data(neighbor, "prevent_click")
-			var is_already_owned_cell = player_territory.has(neighbor)
-			var is_in_frontline = frontline_hexes.has(neighbor)
-
-			if  does_cell_exist and is_cell_clickable and not is_already_owned_cell and not is_in_frontline: #if the cell is not empty
-				var direction: Vector2 = pos - neighbor
-				var global_pos = cell_to_global(pos)
-				var point1 = Vector2.ZERO
-				var point2 = Vector2.ZERO
-				
-				var is_even_row = pos.y % 2 == 0
-				
-				match direction:
-					Vector2(1, 0): # Left neighbor
-						point1 = global_pos - Vector2(cell_size_x / 2, cell_size_y / 4)
-						point2 = global_pos - Vector2(cell_size_x / 2, -cell_size_y / 4)
-					Vector2(-1, 0): # Right neighbor
-						point1 = global_pos + Vector2(cell_size_x / 2, -cell_size_y / 4)
-						point2 = global_pos + Vector2(cell_size_x / 2, cell_size_y / 4)
-					Vector2(0, 1): # Top-left neighbor
-						if is_even_row:
-							point1 = global_pos + Vector2(0, -cell_size_y / 2)
-							point2 = global_pos + Vector2(cell_size_x / 2, -cell_size_y / 4)
-						else:
-							point1 = global_pos + Vector2(-cell_size_x / 2, -cell_size_y / 4)
-							point2 = global_pos + Vector2(0, -cell_size_y / 2)
-					Vector2(0, -1): # Bottom-right neighbor
-						if is_even_row:
-							point1 = global_pos + Vector2(0, cell_size_y / 2)
-							point2 = global_pos + Vector2(cell_size_x / 2, cell_size_y / 4)
-						else:
-							point1 = global_pos + Vector2(-cell_size_x / 2, cell_size_y / 4)
-							point2 = global_pos + Vector2(0, cell_size_y / 2)
-					Vector2(1, 1): # Top-right neighbor
-						point1 = global_pos + Vector2(0, -cell_size_y / 2)
-						point2 = global_pos + Vector2(-cell_size_x / 2, -cell_size_y / 4)
-					Vector2(1, -1): # Bottom-left neighbor 
-						point1 = global_pos + Vector2(-cell_size_x / 2, cell_size_y / 4)
-						point2 = global_pos + Vector2(0, cell_size_y / 2)
-					Vector2(-1, 1): # Already handled correctly
-						point1 = global_pos + Vector2(0, -cell_size_y / 2)
-						point2 = global_pos + Vector2(cell_size_x / 2, -cell_size_y / 4)
-					Vector2(-1, -1): # Already handled correctly
-						point1 = global_pos + Vector2(0, cell_size_y / 2)
-						point2 = global_pos + Vector2(cell_size_x / 2, cell_size_y / 4)
-
-				frontline_points.append(point1)
-				frontline_points.append(point2)
-				
-	return frontline_points
+			var is_already_taken = players_territories.has(neighbor)
+			
+			# If cell exists, is clickable, and not already owned by anyone
+			if does_cell_exist and is_cell_clickable and not is_already_taken:
+				if not conquest_candidates.has(neighbor):
+					conquest_candidates.append(neighbor)
+	
+	# If no conquest candidates available, return invalid position
+	if conquest_candidates.is_empty():
+		return Vector2i(-999, -999)
+	
+	# Return the first available candidate
+	return conquest_candidates[0]
