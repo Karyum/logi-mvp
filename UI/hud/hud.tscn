@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://c6rr0laopmbai"]
+[gd_scene load_steps=7 format=3 uid="uid://c6rr0laopmbai"]
 
 [ext_resource type="Script" uid="uid://cewj3keo8krmk" path="res://UI/hud/hud.gd" id="1_ne75i"]
+[ext_resource type="PackedScene" uid="uid://bmgwuoe4437hk" path="res://UI/factory_inventory/factory_inventory.tscn" id="2_upt0d"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ne75i"]
 
@@ -155,6 +156,15 @@ text = "Trucks: "
 [node name="Amount" type="Label" parent="TruckContainer"]
 layout_mode = 2
 text = "0x"
+
+[node name="FactoryInventory" parent="." instance=ExtResource("2_upt0d")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [connection signal="pressed" from="MarginContainer/BuildButton" to="." method="_on_build_button_pressed"]
 [connection signal="pressed" from="BuildingDrawer/VBoxContainer/CloseWrapper/CloseBuildDrawer" to="." method="_on_close_build_drawer_pressed"]

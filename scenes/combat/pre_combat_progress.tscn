@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://b3qc7a38xk322"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_epsfv"]
+bg_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b8k8n"]
+bg_color = Color(0.963487, 0, 0.333507, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="PreCombatProgress" type="ProgressBar"]
+custom_minimum_size = Vector2(80, 10)
+offset_right = 50.0
+offset_bottom = 4.0
+theme_override_styles/background = SubResource("StyleBoxFlat_epsfv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_b8k8n")
+max_value = 20.0
+step = 1.0
+value = 20.0
+rounded = true
+show_percentage = false

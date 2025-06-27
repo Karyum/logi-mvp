@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://vqe4f380gxmg"]
 
 [ext_resource type="Script" uid="uid://g7nwhsii2sfu" path="res://scenes/transport/route.gd" id="1_um8i2"]
-[ext_resource type="Texture2D" uid="uid://buhq7md742q06" path="res://scenes/iso/truck.png" id="2_f4vqr"]
+[ext_resource type="Texture2D" uid="uid://buhq7md742q06" path="res://assets/truck.png" id="2_f4vqr"]
 
 [sub_resource type="Curve2D" id="Curve2D_6oryg"]
 

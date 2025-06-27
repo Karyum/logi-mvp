@@ -1,0 +1,14 @@
+{
+	"steel": {
+		"grid_size": 32
+	},
+	"aluminium": {
+		"grid_size": 32
+	},
+	"bio": {
+		"grid_size": 24
+	},
+	"oil": {
+		"grid_size": 16
+	}
+}

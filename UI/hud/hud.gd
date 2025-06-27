@@ -2,16 +2,30 @@ extends CanvasLayer
 class_name HUD
 
 @export var drawers_animation_speed = 0.4
-var build_drawer = false
+#var build_drawer = false
 
 signal on_building_factory(type: String)
 
+var is_building_factory = false
+
 @onready var time_label: Label = $TimeContainer/Time
 @onready var truck_label: Label = $TruckContainer/Amount
+@onready var inventory_ui: FactoryInventory = $FactoryInventory
 
 func _ready():
 	HudManager.set_hud(self)
-	GameState.game_time_updated.connect(_on_time_update)
+	inventory_ui.visible = false
+	EventBus.time_updated.connect(_on_time_update)
+	
+func open_factory_inventory(factory_data: Factory):
+	if is_building_factory: return
+	
+	inventory_ui.open_inventory(factory_data)
+	_on_close_build_drawer_pressed()
+	
+
+func close_factory_inventory():
+	inventory_ui.visible = false
 
 func _on_build_button_pressed() -> void:
 	print('Open building drawer')
@@ -45,16 +59,19 @@ func update_truck_amount(amount: int):
 	truck_label.text = str(amount) + 'x'
 
 func _on_steel_factory_button_pressed() -> void:
+	is_building_factory = true
 	update_label_status('Building Steel Factory')
 	on_building_factory.emit('steel')
 
 
 func _on_aluminium_factory_button_pressed() -> void:
+	is_building_factory = true
 	update_label_status('Building Aluminium Factory')
 	on_building_factory.emit('aluminium')
 
 
 func _on_bio_factory_button_pressed() -> void:
+	is_building_factory = true
 	update_label_status('Building Bio Factory')
 	on_building_factory.emit('bio')
 	

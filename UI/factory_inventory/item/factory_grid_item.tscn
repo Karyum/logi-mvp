@@ -1,0 +1,48 @@
+[gd_scene load_steps=4 format=3 uid="uid://ejw3opkn55b5"]
+
+[ext_resource type="Script" uid="uid://b7hlgs55gxbub" path="res://UI/factory_inventory/item/factory_grid_item.gd" id="1_whes1"]
+[ext_resource type="Script" uid="uid://dfuh7od0cj34a" path="res://UI/factory_inventory/item/name_label.gd" id="2_d2c8v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_whes1"]
+bg_color = Color(0.564706, 0.564706, 0.564706, 0.360784)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.136826, 0.136826, 0.136826, 1)
+
+[node name="FactoryGridItem" type="Node2D"]
+script = ExtResource("1_whes1")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_whes1")
+
+[node name="NameLabel" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -11.5
+offset_right = 0.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+script = ExtResource("2_d2c8v")

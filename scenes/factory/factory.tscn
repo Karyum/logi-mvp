@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://bfepgjd3q12wl"]
+
+[ext_resource type="Script" uid="uid://b6c4m6shjge3q" path="res://scenes/factory/factory.gd" id="1_tpwrr"]
+
+[node name="Factory" type="Node2D"]
+script = ExtResource("1_tpwrr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.8, 0.8)

@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://bmgwuoe4437hk"]
+
+[ext_resource type="Script" uid="uid://buml1iedcxwg0" path="res://UI/factory_inventory.gd" id="1_a7k1t"]
+
+[node name="FactoryInventory" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_a7k1t")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(600, 300)
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.521141, 0.521141, 0.52114, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="ColorRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/MarginContainer"]
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+
+[node name="Button" type="Button" parent="ColorRect/MarginContainer/VBoxContainer/Header"]
+custom_minimum_size = Vector2(60, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Spawn"
+
+[node name="GridContainer" type="GridContainer" parent="ColorRect/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = -1
+theme_override_constants/v_separation = -1
+columns = 8
+
+[connection signal="pressed" from="ColorRect/MarginContainer/VBoxContainer/Header/Button" to="." method="_on_button_pressed"]

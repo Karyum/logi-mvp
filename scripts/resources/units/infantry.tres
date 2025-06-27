@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="UnitResource" load_steps=2 format=3 uid="uid://cy08145qc6vys"]
+
+[ext_resource type="Script" uid="uid://b4xqqc2qjlue" path="res://scripts/resources/types/unit.type.gd" id="1_pubop"]
+
+[resource]
+script = ExtResource("1_pubop")
+unit_type = "INFANTRY"
+attack_power = 4
+metadata/_custom_type_script = "uid://b4xqqc2qjlue"

@@ -6,8 +6,8 @@ var route: PackedScene = preload("res://scenes/transport/route.tscn")
 @onready var map_parent = $".."
 
 var start_point = null
-var choosing_building_tile = false
-var buildingType = ''
+var choosing_factory_tile = false
+var factory_type = ''
 var routes_end_points = []
 	
 func _ready():
@@ -31,7 +31,7 @@ func _unhandled_input(event):
 			
 			var unit_id = ArmyManager.army_belong_to_player(pos_clicked, NetworkManager.player_id)
 			if unit_id:
-				if ArmyManager.selected_unit and (ArmyManager.selected_unit.army_data['current_pos'] == pos_clicked or ArmyManager.selected_unit.is_moving):
+				if ArmyManager.selected_army and ArmyManager.selected_army.army_data['current_pos'] == pos_clicked :
 					return
 				else:
 					ArmyManager.select_unit(unit_id)
@@ -41,19 +41,22 @@ func _unhandled_input(event):
 			#if not TerritoryManager.territories.has(pos_clicked) or not TerritoryManager.territories[pos_clicked] == NetworkManager.player_id:
 				#return
 				
-			if choosing_building_tile:
-				choosing_building_tile = false
+			if choosing_factory_tile:
+				choosing_factory_tile = false
 				HudManager.hud.update_label_status('Factory Built on ' + str(pos_clicked.x) + ', ' + str(pos_clicked.y))
+				HudManager.hud.is_building_factory = false
+				print(TerritoryManager.can_place_factory(pos_clicked))
 				if TerritoryManager.can_place_factory(pos_clicked):
-					TerritoryManager.place_factory_local(pos_clicked, buildingType)
+					ProductionManager.add_factory(NetworkManager.player_id ,pos_clicked, factory_type)
 			else:
-				if not start_point:
-					start_point = pos_clicked
-				else:
-					routes_end_points.append([start_point, pos_clicked])
-					var path = HexUtil.get_waypoints_path([start_point, pos_clicked])
-					add_route(path)
-					start_point = null
+				pass
+				#if not start_point:
+					#start_point = pos_clicked
+				#else:
+					#routes_end_points.append([start_point, pos_clicked])
+					#var path = HexUtil.get_waypoints_path([start_point, pos_clicked])
+					#add_route(path)
+					#start_point = null
 					
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.is_pressed():
 			if not tile_data:
@@ -76,5 +79,5 @@ func add_route(path: Array) -> void:
 	
 
 func _on_hud_on_building_factory(type: String) -> void:
-	choosing_building_tile = true
-	buildingType = type
+	choosing_factory_tile = true
+	factory_type = type

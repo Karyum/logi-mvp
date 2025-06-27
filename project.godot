@@ -26,6 +26,8 @@ MapManager="*res://scripts/managers/map_manager.gd"
 ArmyManager="*res://scripts/managers/army_manager.gd"
 HudManager="*res://scripts/managers/hud_manager.gd"
 RouteManager="*res://scripts/managers/routes_manager.gd"
+EventBus="*res://scripts/event_bus.gd"
+DataHandler="*res://scripts/util/data_handler.gd"
 
 [debug]
 
@@ -46,7 +48,7 @@ enabled=PackedStringArray()
 
 drag={
 "deadzone": 0.2,
-"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":2,"position":Vector2(68, 22),"global_position":Vector2(77, 70),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":2,"position":Vector2(138, 23),"global_position":Vector2(147, 71),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
 ]
 }
 zoomIn={
@@ -74,6 +76,16 @@ pan_down={
 pan_up={
 "deadzone": 0.2,
 "events": []
+}
+mouse_rightclick={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":2,"position":Vector2(176, 19),"global_position":Vector2(185, 67),"factor":1.0,"button_index":2,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
+}
+mouse_leftclick={
+"deadzone": 0.2,
+"events": [Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"button_mask":1,"position":Vector2(104, 11),"global_position":Vector2(113, 59),"factor":1.0,"button_index":1,"canceled":false,"pressed":true,"double_click":false,"script":null)
+]
 }
 
 [rendering]

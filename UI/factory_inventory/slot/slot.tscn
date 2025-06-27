@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://bd5im5nbnr3ae"]
+
+[ext_resource type="Script" uid="uid://bt6maql7kh4de" path="res://UI/factory_inventory/slot/slot.gd" id="1_p5h00"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o27wx"]
+bg_color = Color(0.521569, 0.521569, 0.521569, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.314316, 0.314316, 0.314316, 1)
+
+[node name="Slot" type="Panel"]
+custom_minimum_size = Vector2(50, 50)
+theme_override_styles/panel = SubResource("StyleBoxFlat_o27wx")
+script = ExtResource("1_p5h00")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StatusFilter" type="ColorRect" parent="MarginContainer"]
+layout_mode = 2
+color = Color(1, 1, 1, 0)

@@ -1,18 +1,46 @@
-[gd_resource type="Resource" script_class="MapConfiguration" load_steps=9 format=3 uid="uid://dlhl1shk5tf2l"]
+[gd_resource type="Resource" script_class="MapConfiguration" load_steps=17 format=3 uid="uid://dlhl1shk5tf2l"]
 
 [ext_resource type="PackedScene" uid="uid://wpy4qb5gpuih" path="res://scenes/maps/dev_map_small.tscn" id="1_hiecj"]
 [ext_resource type="Script" uid="uid://dcf5apw73ql12" path="res://scripts/resources/army_spawners.gd" id="1_yiti7"]
+[ext_resource type="Script" uid="uid://d0g3n07j1p0n8" path="res://scripts/resources/army_spawn_point.gd" id="2_myui7"]
 [ext_resource type="Script" uid="uid://b4nj7scskrn2h" path="res://scripts/resources/map_configuration.gd" id="2_yiti7"]
 [ext_resource type="Script" uid="uid://cutxxo2x6h45o" path="res://scripts/resources/territory.gd" id="3_16dx3"]
+[ext_resource type="Script" uid="uid://b4xqqc2qjlue" path="res://scripts/resources/types/unit.type.gd" id="3_nedxf"]
+[ext_resource type="Resource" uid="uid://d8fkjvu1btg1" path="res://scripts/resources/units/tank.tres" id="4_p7hqy"]
+[ext_resource type="Resource" uid="uid://cy08145qc6vys" path="res://scripts/resources/units/infantry.tres" id="5_fu5vu"]
+
+[sub_resource type="Resource" id="Resource_rrad7"]
+script = ExtResource("2_myui7")
+position = Vector2i(1, 3)
+units = Array[ExtResource("3_nedxf")]([ExtResource("4_p7hqy"), ExtResource("5_fu5vu")])
+metadata/_custom_type_script = "uid://d0g3n07j1p0n8"
+
+[sub_resource type="Resource" id="Resource_hxwhx"]
+script = ExtResource("2_myui7")
+position = Vector2i(3, 1)
+units = Array[ExtResource("3_nedxf")]([ExtResource("5_fu5vu")])
+metadata/_custom_type_script = "uid://d0g3n07j1p0n8"
 
 [sub_resource type="Resource" id="Resource_16dx3"]
 script = ExtResource("1_yiti7")
-spawners = Array[Vector2i]([Vector2i(1, 3), Vector2i(3, 1)])
+spawners = Array[ExtResource("2_myui7")]([SubResource("Resource_rrad7"), SubResource("Resource_hxwhx")])
 metadata/_custom_type_script = "uid://dcf5apw73ql12"
+
+[sub_resource type="Resource" id="Resource_2bo2b"]
+script = ExtResource("2_myui7")
+position = Vector2i(3, 5)
+units = Array[ExtResource("3_nedxf")]([ExtResource("4_p7hqy")])
+metadata/_custom_type_script = "uid://d0g3n07j1p0n8"
+
+[sub_resource type="Resource" id="Resource_mnvu2"]
+script = ExtResource("2_myui7")
+position = Vector2i(5, 4)
+units = Array[ExtResource("3_nedxf")]([ExtResource("5_fu5vu")])
+metadata/_custom_type_script = "uid://d0g3n07j1p0n8"
 
 [sub_resource type="Resource" id="Resource_sqhis"]
 script = ExtResource("1_yiti7")
-spawners = Array[Vector2i]([Vector2i(3, 5), Vector2i(4, 3)])
+spawners = Array[ExtResource("2_myui7")]([SubResource("Resource_2bo2b"), SubResource("Resource_mnvu2")])
 metadata/_custom_type_script = "uid://dcf5apw73ql12"
 
 [sub_resource type="Resource" id="Resource_hiecj"]

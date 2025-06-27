@@ -4,11 +4,11 @@ extends Node
 
 # Core game signals
 signal game_state_updated()
-signal game_time_updated(new_time: float)
+#signal game_time_updated(new_time: float)
 signal game_started()
 #signal game_paused()
 #signal game_resumed()
-signal game_battle_turn_started()
+#signal game_battle_turn_started()
 
 var game_timer: Timer = null
 
@@ -29,6 +29,8 @@ var last_emit_ms = 0
 
 func _ready():
 	set_process(true)
+	EventBus.game_battle_turn.connect(_on_game_battle_turn)
+
 
 
 func _process(_delta):
@@ -46,15 +48,14 @@ func _on_timer_timeout():
 	game_time += 1
 	
 	# Host gets it immediately
-	game_time_updated.emit(game_time)
-	
-	# Clients get it shortly after (network latency)
-	send_game_timer.rpc(game_time)
+	EventBus.time_updated.emit(game_time)
+	EventBus.time_updated_rpc(game_time)
 	
 	if game_time / 10 > game_battle_turn:
 		game_battle_turn += 1
-		game_battle_turn_started.emit()
-		send_game_battle_turn.rpc(game_battle_turn)
+		print(NetworkManager.player_id)
+		EventBus.game_battle_turn.emit(game_battle_turn)
+		EventBus.send_game_battle_turn_rpc(game_battle_turn)
 		
 	game_timer.start()
 		
@@ -140,13 +141,5 @@ func load_game_data(data: Dictionary):
 	game_state_updated.emit()
 
 
-# NETWORK
-@rpc("authority", "call_remote", "reliable")
-func send_game_timer(new_game_time: int):
-	game_time = new_game_time
-	game_time_updated.emit(new_game_time)
-	
-@rpc("authority", "call_remote", "reliable")
-func send_game_battle_turn(new_game_battle_turn: int):
+func _on_game_battle_turn(new_game_battle_turn: int):
 	game_battle_turn = new_game_battle_turn
-	game_battle_turn_started.emit()
