@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="FactoryItem" load_steps=2 format=3 uid="uid://bjm2senlw7mgf"]
+
+[ext_resource type="Script" uid="uid://bd63an0dg78xt" path="res://scripts/resources/types/factory_item.type.gd" id="1_2utet"]
+
+[resource]
+script = ExtResource("1_2utet")
+item_id = 14
+name = "Artillery Module"
+grid = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2)])
+metadata/_custom_type_script = "uid://bd63an0dg78xt"

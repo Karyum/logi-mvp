@@ -15,3 +15,4 @@ var factory_type: String
 @export_file("*.png")  var factory_sprite
 @export var position: Vector2i
 @export var player_id: int
+@export var items: Array

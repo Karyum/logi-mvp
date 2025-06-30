@@ -2,7 +2,8 @@ extends Node2D
 class_name FactoryGridItem
 
 @onready var item_label: Label = $Panel/NameLabel
-
+@onready var tree = get_tree()
+@onready var factory_inventory = preload("res://UI/factory_inventory/factory_inventory.gd")
 
 var item_id: int
 var item_grid := []
@@ -16,7 +17,16 @@ func _process(delta: float) -> void:
 	if selected:
 		global_position = lerp(global_position, get_global_mouse_position(), 100 * delta)
 		
+func _input(event):
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		var inventory_grid = tree.current_scene.find_child('InventoryGrid')
+		var inventory_parent = tree.current_scene.find_child('FactoryInventory')
 		
+		if not inventory_grid.get_global_rect().has_point(event.position) and selected:
+			queue_free()
+			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			inventory_parent.clear_grid()
+
 	
 func load_item(factory_type: String, new_item_id: int) -> void:
 	var item_data = DataHandler.find_factory_item(factory_type, new_item_id)
@@ -37,13 +47,10 @@ func calculate_grid_size(coordinates: Array) -> Vector2:
 	var max_x = 0
 	var max_y = 0
 	
-	for coord_str in coordinates:
-		var parts = coord_str.split(",")
-		var x = int(parts[0])
-		var y = int(parts[1])
+	for coord in coordinates:
 		
-		max_x = max(max_x, x)
-		max_y = max(max_y, y)
+		max_x = max(max_x, coord.x)
+		max_y = max(max_y, coord.y)
 	
 	# Add 1 because coordinates are 0-based, then multiply by cell size
 	var width = (max_x + 1) * 49
@@ -56,42 +63,41 @@ func rotate_item():
 		rotation_degrees = 0
 		# Rotate coordinates back (counter-clockwise)
 		for i in range(item_grid.size()):
-			var xy = item_grid[i].split(',')
-			var temp_x = int(xy[0])
-			var new_x = -int(xy[1])
+			var temp_x = item_grid[i][0]
+			var new_x = -item_grid[i][1]
 			var new_y = temp_x
-			item_grid[i] = str(new_x) + "," + str(new_y)
+			item_grid[i] = Vector2i(new_x, new_y)
 		
-		$Panel.position += Vector2(panel_size.y + 20, 0)
+		$Panel.position += Vector2(panel_size.y, 0)
 		rotated = false
 	else:
 		rotation_degrees = 90
 		# Rotate coordinates forward (clockwise)
 		for i in range(item_grid.size()):
-			var xy = item_grid[i].split(',')
-			var temp_y = int(xy[1])
+			var temp_y = item_grid[i][1]
 			var new_x = temp_y
-			var new_y = -int(xy[0])
-			item_grid[i] = str(new_x) + "," + str(new_y)
+			var new_y = -item_grid[i][0]
+			item_grid[i] =  Vector2i(new_x, new_y)
 		
 		rotated = true
-		$Panel.position -= Vector2(panel_size.y + 20, 0)
+		$Panel.position -= Vector2(panel_size.y, 0)
 
-func _snap_to(destination):
+func _snap_to(destination, animation_time = 0.15):
+	print('destination ', destination)
 	var tween = get_tree().create_tween()
 	#separate cases to avoid snapping errors
 	if rotation_degrees == 0:
 		destination += Vector2(20 ,20)
 	else:
-		var temp_xy_switch = Vector2(panel_size.y - 20,panel_size.y + 40)
-		destination += temp_xy_switch
+		#var temp_xy_switch = Vector2(panel_size.y - 20,panel_size.y + 40)
+		destination += Vector2(panel_size.y - 20, panel_size.y + 20)
 
 	var style_box = StyleBoxFlat.new()
 	style_box.set_border_width_all(0)
 	style_box.bg_color = Color(Color.DARK_GRAY, 1.0)
 	$Panel.add_theme_stylebox_override("panel", style_box)
 
-	tween.tween_property(self, "global_position", destination, 0.15).set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self, "global_position", destination, animation_time).set_trans(Tween.TRANS_SINE)
 	selected = false
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 

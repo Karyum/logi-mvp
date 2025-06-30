@@ -25,7 +25,7 @@ func assign_armies_spawners():
 		var index = 1
 		
 		for army_spawn_point: ArmySpawnPointResource in player_army.spawners:
-			var player_id = TerritoryManager.territories[army_spawn_point.position]
+			var player_id = TerritoryManager.territories[army_spawn_point.position as Vector2i]
 			var unit_id = 'army ' + str(index) + '-' + str(player_id)
 	
 			var army_data = Army.new()

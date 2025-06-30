@@ -3,6 +3,8 @@ extends Node
 signal time_updated(new_time: int)
 signal game_battle_turn(new_game_battle_turn: int)
 signal factory_placed(placing_player_id: int, hex_pos: Vector2i, factory_type: String)
+signal ui_factory_inventory_opened(pos: Vector2i)
+signal ui_factory_inventory_closed()
 
 #func _ready() -> void:
 	#game_battle_turn.connect(_on_send_game_battle_turn)

@@ -3,9 +3,13 @@
 [ext_resource type="Script" uid="uid://buml1iedcxwg0" path="res://UI/factory_inventory/factory_inventory.gd" id="1_a7k1t"]
 
 [node name="FactoryInventory" type="Control"]
+custom_minimum_size = Vector2(800, 300)
 layout_mode = 3
 anchors_preset = 0
+offset_right = 800.0
+offset_bottom = 300.0
 script = ExtResource("1_a7k1t")
+metadata/_edit_group_ = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(800, 300)
@@ -48,7 +52,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 alignment = 1
 
-[node name="GridContainer" type="GridContainer" parent="ColorRect/HBoxContainer/MarginContainer/VBoxContainer"]
+[node name="InventoryGrid" type="GridContainer" parent="ColorRect/HBoxContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_constants/h_separation = -1

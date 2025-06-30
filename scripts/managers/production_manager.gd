@@ -10,10 +10,13 @@ var factory_scene = preload("res://scenes/factory/factory.tscn")
 @onready var tree = get_tree()
 
 var factories: Dictionary[Vector2i, Factory] = {}  # hex_pos -> Factory data
+var selected_factory: Factory
 
 
 func _ready() -> void:
 	EventBus.factory_placed.connect(_on_player_placed_factory)
+	#EventBus.ui_factory_inventory_opened.connect(_on_factory_inventory_opened)
+	#EventBus.ui_factory_inventory_closed.connect(_on_factory_inventory_closed)
 
 # Called when local player places a factory (initiates network sync)
 func add_factory(player_id: int, hex_pos: Vector2i, factory_type: String):
@@ -64,30 +67,19 @@ func has_factory_at(hex_pos: Vector2i):
 		return true
 	
 	return false
+	
+	
+func save_factory_layout(factory_id: Vector2i, items: Array):
+	factories[factory_id].items = items
+
+func get_factory_items(factory_id: Vector2i) -> Array:
+	return factories[factory_id].items
+
 
 func find_factory_type_data(hex_pos: Vector2i) -> Factory:
 	return factories[hex_pos]
+	
 
 func _on_player_placed_factory(placing_player_id: int, hex_pos: Vector2i, factory_type: String):
 	if NetworkManager.player_id != placing_player_id:
-		print(NetworkManager.player_id, placing_player_id)
 		_create_factory(placing_player_id, hex_pos, factory_type)
-	# we need also player_id 
-	# Add the key of hex_pos to this new factory
-	# get some of it's data from the resource
-	# we might also want to have the items data of the factory in that resource
-	# then sync with other players
-	
-	#factories[hex_pos] = factory_data
-	#
-	## Update player factory count
-	#var owner_id = factory_data.get("owner_id", 0)
-	#if GameState.players.has(owner_id):
-		#GameState.players[owner_id].factories_count += 1
-	
-	#sync_production_rpc.rpc(factories)
-	#
-#@rpc("any_peer", "call_local", "reliable")
-#func sync_production_rpc(updated_factories: Dictionary):
-	#factories = updated_factories
-	#GameState.notify_state_updated()

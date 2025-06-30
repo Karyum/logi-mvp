@@ -44,7 +44,7 @@ func get_local_ip() -> String:
 	return "127.0.0.1"
 
 # Host a game
-func host_game(port: int = 7000, player_name: String = 'Potato Host'):
+func host_game(port: int = 7002, player_name: String = 'Potato Host'):
 	multiplayer_peer = ENetMultiplayerPeer.new()
 	multiplayer_peer.create_server(port, 4)  # Max 4 players
 	multiplayer.multiplayer_peer = multiplayer_peer
@@ -61,7 +61,7 @@ func host_game(port: int = 7000, player_name: String = 'Potato Host'):
 	#print("Game hosted on port ", get_local_ip(), ":", port)
 
 # Join a game
-func join_game(ip: String = "127.0.0.1", port: int = 7000, player_name: String = "Player") -> Dictionary:
+func join_game(ip: String = "127.0.0.1", port: int = 7002, player_name: String = "Player") -> Dictionary:
 	multiplayer_peer = ENetMultiplayerPeer.new()
 	multiplayer_peer.create_client(ip, port)
 	multiplayer.multiplayer_peer = multiplayer_peer

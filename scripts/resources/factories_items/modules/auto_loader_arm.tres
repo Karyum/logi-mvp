@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="FactoryItem" load_steps=2 format=3 uid="uid://b4wxfw450qp1d"]
+
+[ext_resource type="Script" uid="uid://bd63an0dg78xt" path="res://scripts/resources/types/factory_item.type.gd" id="1_8nhm4"]
+
+[resource]
+script = ExtResource("1_8nhm4")
+item_id = 15
+name = "Auto-Loader Arm"
+grid = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0)])
+metadata/_custom_type_script = "uid://bd63an0dg78xt"
