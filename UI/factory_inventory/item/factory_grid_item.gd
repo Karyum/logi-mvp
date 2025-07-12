@@ -38,6 +38,7 @@ func load_item(factory_type: String, new_item_id: int) -> void:
 	panel_size = calculate_grid_size(item_grid)
 	$Panel.size = panel_size
 	item_label.text = item_name
+	item_label.add_theme_font_size_override("font_size", 36)
 	
 
 func calculate_grid_size(coordinates: Array) -> Vector2:
@@ -83,14 +84,12 @@ func rotate_item():
 		$Panel.position -= Vector2(panel_size.y, 0)
 
 func _snap_to(destination, animation_time = 0.15):
-	print('destination ', destination)
 	var tween = get_tree().create_tween()
 	#separate cases to avoid snapping errors
 	if rotation_degrees == 0:
-		destination += Vector2(20 ,20)
+		destination += Vector2(21 ,21)
 	else:
-		#var temp_xy_switch = Vector2(panel_size.y - 20,panel_size.y + 40)
-		destination += Vector2(panel_size.y - 20, panel_size.y + 20)
+		destination += Vector2(panel_size.y - 19, panel_size.y + 21)
 
 	var style_box = StyleBoxFlat.new()
 	style_box.set_border_width_all(0)

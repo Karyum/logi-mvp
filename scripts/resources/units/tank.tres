@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="UnitResource" load_steps=2 format=3 uid="uid://d8fkjvu1btg1"]
+[gd_resource type="Resource" script_class="ArmyUnit" load_steps=2 format=3 uid="uid://d8fkjvu1btg1"]
 
 [ext_resource type="Script" uid="uid://b4xqqc2qjlue" path="res://scripts/resources/types/unit.type.gd" id="1_mg7re"]
 
@@ -6,4 +6,8 @@
 script = ExtResource("1_mg7re")
 unit_type = "TANK"
 attack_power = 10
+fuel_amount = 10
+fuel_cons_rate = 5
+food_amount = 10
+food_cons_rate = 3
 metadata/_custom_type_script = "uid://b4xqqc2qjlue"

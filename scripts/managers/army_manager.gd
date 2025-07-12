@@ -2,7 +2,6 @@ extends Node
 
 var army_unit: PackedScene = preload("res://scenes/combat/army.tscn")
 var battle_particles: PackedScene = preload("res://scenes/particles/battle_particles.tscn")
-var outline_shader: Shader = preload("res://shaders/unit_ountline.gdshader")
 var pre_combat_progress_bar: PackedScene = preload("res://scenes/combat/pre_combat_progress.tscn")
 
 @onready var tree = get_tree()
@@ -34,11 +33,18 @@ func assign_armies_spawners():
 			army_data.units = army_spawn_point.units
 			army_data.unit_id = unit_id
 			
+			for unit in army_spawn_point.units:
+				army_data.total_fuel_amount += unit.fuel_amount
+				army_data.total_fuel_cons_rate += unit.fuel_cons_rate
+				
+				army_data.total_fuel_amount += unit.food_amount
+				army_data.total_food_cons_rate += unit.food_cons_rate
+			
 			armies[unit_id] = army_data
 
 			index += 1
 
-	sync_starting_territory_rpc.rpc(var_to_str(armies))
+	EventBus.sync_starting_territory_rpc.rpc(var_to_str(armies))
 	armies_spawned.emit(NetworkManager.player_id)
 	
 
@@ -76,25 +82,42 @@ func select_unit(unit_id: String):
 		selected_army.find_child('SubViewportContainer').material = null
 	
 	selected_army = armies_nodes[unit_id]
-	
-	var sprite: SubViewportContainer = selected_army.get_child(0)
-	var shader_material = ShaderMaterial.new()
-	shader_material.shader = outline_shader
-	sprite.material = shader_material
+	selected_army.select_unit()
+
 	
 func unselect_unit():
-	selected_army = null
+	if is_instance_valid(selected_army):
+		selected_army.unselect_unit()
+		selected_army = null
 	
 func is_unit_selected():
 	return selected_army
 	
-func move_unit(unit_pos: Vector2i, _global_pos: Vector2):
-	selected_army.move(unit_pos)
-	move_unit_rpc.rpc(selected_army.army_data.unit_id, unit_pos)
+func move_unit_request(move_to: Vector2i, _global_pos: Vector2):
+	if NetworkManager.is_host:
+		var fuel_cost = get_fuel_cost(selected_army.army_data.unit_id, move_to)
+		
+		if fuel_cost > selected_army.army_data.total_fuel_amount:
+			return
+		
+		EventBus.move_unit_rpc.rpc(selected_army.army_data.unit_id, move_to, fuel_cost)
+	else:
+		EventBus.move_unit_request_rpc.rpc(selected_army.army_data.unit_id, move_to)
 
+func move_unit(unit_id: String, move_to: Vector2i, fuel_cost: int):
+	ArmyManager.armies[unit_id].total_fuel_amount -= fuel_cost
+	ArmyManager.armies_nodes[unit_id].move(move_to, fuel_cost)
+
+func get_fuel_cost(unit_id: String, move_to: Vector2i):
+	var army_data = armies[unit_id]
+	var path = HexUtil.get_waypoints_path([army_data.current_pos, move_to])
+	var path_fuel_cost = HexUtil.get_fuel_cost(army_data.current_pos, move_to)
+	var fuel_cost = ((path.size() - 1) * army_data.total_food_cons_rate) + path_fuel_cost
 	
+	return fuel_cost
+
 func unit_reach_pos(unit_id: String, pos: Vector2i, did_start_battle: bool = false, enemy_pos: Vector2i = Vector2i.ZERO):
-	armies[unit_id]['current_pos'] = pos
+	armies[unit_id].current_pos = pos
 	
 	if armies[unit_id].player_id == NetworkManager.player_id:
 		TerritoryManager.capture_hex(pos)
@@ -107,9 +130,11 @@ func unit_reach_pos(unit_id: String, pos: Vector2i, did_start_battle: bool = fal
 		battle_data.defender = armies[enemy_unit_id]
 		
 		
-		initiate_battle(battle_data)
-		sync_initiate_battle(battle_data)
-		
+		if NetworkManager.is_host:
+			initiate_battle(battle_data)
+			EventBus.initiate_battle_rpc.rpc(var_to_str(battle_data))
+		else:
+			EventBus.initiate_battle_request_rpc.rpc(var_to_str(battle_data))
 
 func initiate_battle(battle_data: Battle):
 	var center_point = (HexUtil.cell_to_global(battle_data.attacker.current_pos) + HexUtil.cell_to_global(battle_data.defender.current_pos)) / 2
@@ -141,24 +166,3 @@ func _on_game_time_updated(_new_time: int):
 		if battle.progress == 0:
 			# resolve battle
 			pass
-
-func sync_initiate_battle(battle_data: Battle):
-	var serialized = var_to_str(battle_data)
-	initiate_battle_rpc.rpc(serialized)
-
-# NETWORK
-@rpc("authority", "call_remote", "reliable")
-func sync_starting_territory_rpc(armies_location: String) -> void:
-	armies = str_to_var(armies_location) as Dictionary[String, Army]
-	
-	armies_spawned.emit(NetworkManager.player_id)
-	NetworkManager.loading_screen_part_loaded_rpc.rpc("armies_spawned", NetworkManager.player_id)
-
-
-@rpc("any_peer", "call_remote", "reliable")
-func move_unit_rpc(unit_id: String, move_to: Vector2i):
-	armies_nodes[unit_id].move(move_to)
-
-@rpc("any_peer", "call_remote", "reliable")
-func initiate_battle_rpc(battle_data: String):
-	initiate_battle(str_to_var(battle_data) as Battle)

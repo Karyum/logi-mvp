@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://ejw3opkn55b5"]
+[gd_scene load_steps=6 format=3 uid="uid://ejw3opkn55b5"]
 
 [ext_resource type="Script" uid="uid://b7hlgs55gxbub" path="res://UI/factory_inventory/item/factory_grid_item.gd" id="1_whes1"]
+[ext_resource type="Theme" uid="uid://bphibxtactaw" path="res://UI/themes/main.tres" id="2_1u84x"]
 [ext_resource type="Script" uid="uid://dfuh7od0cj34a" path="res://UI/factory_inventory/item/name_label.gd" id="2_d2c8v"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_whes1"]
@@ -10,6 +11,8 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.136826, 0.136826, 0.136826, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mitpr"]
 
 [node name="FactoryGridItem" type="Node2D"]
 script = ExtResource("1_whes1")
@@ -41,7 +44,9 @@ offset_right = 0.5
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_1u84x")
 theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_styles/normal = SubResource("StyleBoxEmpty_mitpr")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

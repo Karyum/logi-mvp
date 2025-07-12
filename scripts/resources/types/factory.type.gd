@@ -2,13 +2,13 @@ extends Resource
 class_name Factory
 
 const FactoryType =  { 
-	"STEEL": "STEEL",
-	"ALUMINIUM": "ALUMINIUM",
-	"BIO": "BIO",
-	"OIL": "OIL"	
+	"STEEL": "steel",
+	"ALUMINIUM": "aluminium",
+	"BIO": "bio",
+	"OIL": "oil"	
 }
 
-@export_enum("STEEL", "ALUMINIUM", "BIO", "OIL")
+@export_enum("steel", "aluminium", "bio", "oil")
 var factory_type: String
 
 @export var grid_size: int
@@ -16,3 +16,4 @@ var factory_type: String
 @export var position: Vector2i
 @export var player_id: int
 @export var items: Array
+@export var factory_storage: Array[FactoryItemStorage]

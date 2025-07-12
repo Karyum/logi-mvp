@@ -19,7 +19,7 @@ func _ready():
 	
 func open_factory_inventory(factory_data: Factory):
 	if is_building_factory: return
-	print('huh')
+	
 	inventory_ui.open_inventory(factory_data)
 	EventBus.ui_factory_inventory_opened.emit(factory_data.position)
 	_on_close_build_drawer_pressed()

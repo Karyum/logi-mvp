@@ -1,9 +1,14 @@
-[gd_resource type="Resource" script_class="Factory" load_steps=2 format=3 uid="uid://u4ec7mus4h1j"]
+[gd_resource type="Resource" script_class="Factory" load_steps=3 format=3 uid="uid://u4ec7mus4h1j"]
 
 [ext_resource type="Script" uid="uid://dplke6s84e63f" path="res://scripts/resources/types/factory.type.gd" id="1_6vebc"]
+[ext_resource type="Script" uid="uid://boxok7ejrmsr5" path="res://scripts/resources/types/factory_item_storage.type.gd" id="1_krvxf"]
 
 [resource]
 script = ExtResource("1_6vebc")
-factory_type = "BIO"
+factory_type = "bio"
 grid_size = 24
 factory_sprite = "uid://d4dmo7jjkfaal"
+position = Vector2i(0, 0)
+player_id = 0
+items = []
+factory_storage = Array[ExtResource("1_krvxf")]([])

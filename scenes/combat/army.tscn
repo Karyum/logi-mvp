@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://daew1qhjvq0jg"]
+[gd_scene load_steps=6 format=3 uid="uid://daew1qhjvq0jg"]
 
 [ext_resource type="Material" uid="uid://bpatfqv0mvhlk" path="res://scenes/combat/shader/unit_outline.tres" id="1_8tne7"]
 [ext_resource type="Script" uid="uid://bjv0vt7va32np" path="res://scenes/combat/army.gd" id="2_cvwmg"]
 [ext_resource type="Texture2D" uid="uid://c7rc60lb0xmvl" path="res://assets/sprites/infantry.png" id="3_5kba8"]
 [ext_resource type="Texture2D" uid="uid://bkjh2wbpnybli" path="res://assets/sprites/tank.png" id="4_x6274"]
+[ext_resource type="Theme" uid="uid://bphibxtactaw" path="res://UI/themes/main.tres" id="5_cvwmg"]
 
 [node name="ArmyUnit" type="Node2D"]
 z_index = 3
@@ -46,3 +47,28 @@ texture = ExtResource("3_5kba8")
 [node name="Tank" type="Sprite2D" parent="SubViewportContainer/SubViewport/Node2D"]
 scale = Vector2(1.3, 1.3)
 texture = ExtResource("4_x6274")
+
+[node name="Fuel" type="HBoxContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = 18.0
+offset_right = 20.0
+offset_bottom = 58.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="Label" type="Label" parent="Fuel"]
+layout_mode = 2
+theme = ExtResource("5_cvwmg")
+text = "Fuel: "
+
+[node name="Amount" type="Label" parent="Fuel"]
+layout_mode = 2
+theme = ExtResource("5_cvwmg")
+text = "0"

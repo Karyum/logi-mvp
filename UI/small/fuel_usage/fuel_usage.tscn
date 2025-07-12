@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://duncq8kfknum2"]
+
+[ext_resource type="Theme" uid="uid://bphibxtactaw" path="res://UI/themes/main.tres" id="1_yphro"]
+[ext_resource type="Script" uid="uid://cqmstaeer0t8p" path="res://UI/small/fuel_usage/fuel_usage.gd" id="2_ccicv"]
+
+[node name="FuelUsage" type="Control"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_yphro")
+script = ExtResource("2_ccicv")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 11.0
+text = "Fuel usage:     "

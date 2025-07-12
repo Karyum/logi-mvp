@@ -114,10 +114,13 @@ texture_region_size = Vector2i(120, 140)
 4:13/0 = 0
 5:13/0 = 0
 6:5/0 = 0
+6:5/0/custom_data_1 = 1
 
 [resource]
 tile_shape = 3
 tile_size = Vector2i(120, 138)
 custom_data_layer_0/name = "prevent_click"
 custom_data_layer_0/type = 1
+custom_data_layer_1/name = "fuel_cons"
+custom_data_layer_1/type = 2
 sources/0 = SubResource("TileSetAtlasSource_pe6cs")

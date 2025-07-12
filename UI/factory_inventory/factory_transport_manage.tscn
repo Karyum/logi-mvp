@@ -1,0 +1,103 @@
+[gd_scene load_steps=6 format=3 uid="uid://djjegdvvn2nus"]
+
+[ext_resource type="Theme" uid="uid://bphibxtactaw" path="res://UI/themes/main.tres" id="1_fp18w"]
+[ext_resource type="Script" uid="uid://bu1gk6cekwhw1" path="res://UI/factory_inventory/factory_transport_manage.gd" id="1_lijy8"]
+[ext_resource type="Texture2D" uid="uid://crl1wtv40k4ge" path="res://assets/icons/truck.png" id="2_4onuh"]
+[ext_resource type="Texture2D" uid="uid://ckmfw4vlyrf27" path="res://assets/gui.png" id="2_lijy8"]
+
+[sub_resource type="Theme" id="Theme_xddkn"]
+
+[node name="TransportContainer" type="Control"]
+custom_minimum_size = Vector2(250, 150)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 136.0
+offset_bottom = 78.0
+script = ExtResource("1_lijy8")
+
+[node name="Background" type="NinePatchRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_fp18w")
+texture = ExtResource("2_lijy8")
+region_rect = Rect2(48, 96, 32, 32)
+patch_margin_left = 3
+patch_margin_top = 3
+patch_margin_right = 3
+patch_margin_bottom = 3
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Transport" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_xddkn")
+
+[node name="Header" type="HBoxContainer" parent="Margin/Transport"]
+layout_mode = 2
+
+[node name="TransportType" type="Label" parent="Margin/Transport/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_fp18w")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Truck 1"
+
+[node name="TextureRect" type="TextureRect" parent="Margin/Transport/Header"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+texture = ExtResource("2_4onuh")
+
+[node name="ProgressContainer" type="VBoxContainer" parent="Margin/Transport"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Margin/Transport/ProgressContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Margin/Transport/ProgressContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_fp18w")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 12
+text = "Weight Capacity"
+
+[node name="WeightLabel" type="Label" parent="Margin/Transport/ProgressContainer/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("1_fp18w")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = " 0 / 2 tons"
+
+[node name="ProgressBar" type="ProgressBar" parent="Margin/Transport/ProgressContainer"]
+layout_mode = 2
+
+[node name="ResourcesList" type="VBoxContainer" parent="Margin/Transport"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ListEmptyLabel" type="Label" parent="Margin/Transport"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+theme = ExtResource("1_fp18w")
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 10
+text = "Drag items to fill truck"

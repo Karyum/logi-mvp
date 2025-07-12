@@ -21,7 +21,7 @@ func _ready() -> void:
 	var hex_global_position = MapManager.map.map_to_local(starting_position)
 	map_scene.build_territory()
 	ArmyManager.spawn_armies()
-	RouteManager.setup_transport(GameState.map.trucks_amount)
+	TransportManager.setup_transport(GameState.map.trucks_amount)
 	
 	#camera.rotate(deg_to_rad(camera_rotation))
 	camera.move_to_position(hex_global_position)

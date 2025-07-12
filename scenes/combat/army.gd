@@ -1,9 +1,12 @@
 extends Node2D
 class_name ArmyNode
 
+var outline_shader: Shader = preload("res://shaders/unit_ountline.gdshader")
+
 @onready var move_tween: Tween
 @onready var tank_sprite: Sprite2D = $SubViewportContainer/SubViewport/Node2D/Tank
 @onready var infantry_sprite: Node2D = $SubViewportContainer/SubViewport/Node2D/Infantry
+@onready var fuel_amount_label: Label = $Fuel/Amount
 var line: Line2D
 
 var is_moving: bool = false
@@ -12,33 +15,40 @@ var current_point_index = 0
 
 var is_my_army = false
 
-var army_data: Dictionary = {
-	'player_id': null,
-	'current_pos': Vector2i.ZERO,
-	'unit_id': '',
-	'units': [],
-}
+var army_data: Army
+var is_selected: bool = false
 
 func setup_army(unit_id: String, new_army_data: Army):
 	is_my_army = NetworkManager.player_id == new_army_data.player_id
 	
 	tank_sprite.visible = false
 	infantry_sprite.visible = false
-		
-	army_data['player_id'] = new_army_data.player_id
-	army_data['current_pos'] = new_army_data.current_pos
-	army_data['unit_id'] = unit_id
-	army_data['units'] = new_army_data.units
+	$Fuel.visible = false
+	
+	army_data = Army.new()
+	army_data.player_id
+	army_data.player_id = new_army_data.player_id
+	army_data.current_pos = new_army_data.current_pos
+	army_data.unit_id = unit_id
+	army_data.units = new_army_data.units
 	
 	for unit in new_army_data.units:
+		army_data.total_fuel_amount += unit.fuel_amount
+		army_data.total_fuel_cons_rate += unit.fuel_cons_rate
+		
+		army_data.total_fuel_amount += unit.food_amount
+		army_data.total_food_cons_rate += unit.food_cons_rate
+		
 		match unit.unit_type:
 			ArmyUnit.UnitType.TANK:
 				tank_sprite.visible = true
 			ArmyUnit.UnitType.INFANTRY:
 				infantry_sprite.visible = true
 
-func move(move_to: Vector2i):
+func move(move_to: Vector2i, fuel_cost: int):
 	var current_pos = army_data.current_pos
+	army_data.total_fuel_amount -= fuel_cost
+	fuel_amount_label.text = str(army_data.total_fuel_amount)
 	
 	if is_moving:
 		var last_point = path_points[path_points.size() - 1]
@@ -122,3 +132,17 @@ func create_pathline(path):
 	
 	for point in path:
 		line.add_point(point)
+
+func select_unit():
+	is_selected = true
+	var shader_material = ShaderMaterial.new()
+	shader_material.shader = outline_shader
+	$SubViewportContainer.material = shader_material
+	$Fuel.visible = true
+	fuel_amount_label.text = str(army_data.total_fuel_amount)
+	
+func unselect_unit():
+	is_selected = false
+	$Fuel.visible = false
+	$SubViewportContainer.material = null
+	

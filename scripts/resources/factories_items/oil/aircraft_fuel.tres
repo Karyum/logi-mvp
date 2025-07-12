@@ -7,4 +7,5 @@ script = ExtResource("1_7co50")
 item_id = 11
 name = "Aircraft Fuel"
 grid = Array[Vector2i]([Vector2i(0, 0), Vector2i(1, 0), Vector2i(2, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(2, 1), Vector2i(0, 2), Vector2i(1, 2), Vector2i(2, 2)])
+production_rate = 10
 metadata/_custom_type_script = "uid://bd63an0dg78xt"

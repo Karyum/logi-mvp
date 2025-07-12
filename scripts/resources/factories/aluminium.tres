@@ -1,11 +1,14 @@
-[gd_resource type="Resource" script_class="Factory" load_steps=2 format=3 uid="uid://ctjr74olu0a1v"]
+[gd_resource type="Resource" script_class="Factory" load_steps=3 format=3 uid="uid://ctjr74olu0a1v"]
 
 [ext_resource type="Script" uid="uid://dplke6s84e63f" path="res://scripts/resources/types/factory.type.gd" id="1_qd2dp"]
+[ext_resource type="Script" uid="uid://boxok7ejrmsr5" path="res://scripts/resources/types/factory_item_storage.type.gd" id="1_ywuim"]
 
 [resource]
 script = ExtResource("1_qd2dp")
-factory_type = "ALUMINIUM"
+factory_type = "aluminium"
 grid_size = 32
 factory_sprite = "uid://dapqict13j2ik"
 position = Vector2i(0, 0)
 player_id = 0
+items = []
+factory_storage = Array[ExtResource("1_ywuim")]([])

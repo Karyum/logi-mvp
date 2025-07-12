@@ -2,7 +2,7 @@ extends Node2D
 class_name FactoryScene
 
 var factory_data: Factory
-
+#TODO fix me
 func _ready() -> void:
 	var tex = load(factory_data.factory_sprite)
 	$Sprite2D.texture = tex

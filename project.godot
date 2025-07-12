@@ -25,7 +25,7 @@ ProductionManager="*res://scripts/managers/production_manager.gd"
 MapManager="*res://scripts/managers/map_manager.gd"
 ArmyManager="*res://scripts/managers/army_manager.gd"
 HudManager="*res://scripts/managers/hud_manager.gd"
-RouteManager="*res://scripts/managers/routes_manager.gd"
+TransportManager="*res://scripts/managers/transport_manager.gd"
 EventBus="*res://scripts/event_bus.gd"
 DataHandler="*res://scripts/util/data_handler.gd"
 
@@ -35,14 +35,20 @@ gdscript/warnings/integer_division=0
 
 [display]
 
-window/size/viewport_width=1200
+window/size/viewport_width=1290
 window/size/viewport_height=700
 window/stretch/mode="canvas_items"
+window/stretch/aspect="ignore"
 window/stretch/scale_mode="integer"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/Todo_Manager/plugin.cfg", "res://addons/ui_design_tool/plugin.cfg")
+
+[gui]
+
+theme/custom="uid://bphibxtactaw"
+theme/custom_font="uid://dwvpe83gnue40"
 
 [input]
 

@@ -40,12 +40,14 @@ func load_items():
 func fetch_factory_items(factory_type: String):
 	return factory_items[factory_type]
 
-func find_factory_item(factory_type: String, item_id: int):
+func find_factory_item(factory_type: String, item_id: int) -> FactoryItem:
 	var factory_type_items = factory_items[factory_type] as Array
 	
 	for item in factory_type_items:
 		if int(item['item_id']) == item_id:
 			return item
+	
+	return null
 	
 static func is_resource_file(filename: String) -> bool:
 	# .tres - found during development/testing

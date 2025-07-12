@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://bt6maql7kh4de" path="res://UI/factory_inventory/slot/slot.gd" id="1_p5h00"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o27wx"]
-bg_color = Color(0.521569, 0.521569, 0.521569, 1)
+bg_color = Color(0.391831, 0.593357, 0.687078, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
@@ -12,6 +12,8 @@ border_color = Color(0.314316, 0.314316, 0.314316, 1)
 
 [node name="Slot" type="Panel"]
 custom_minimum_size = Vector2(50, 50)
+offset_right = 50.0
+offset_bottom = 50.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_o27wx")
 script = ExtResource("1_p5h00")
 

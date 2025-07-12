@@ -22,7 +22,7 @@ func add_all_point():
 		var next_id := astar.get_available_point_id()
 
 		if not get_cell_custom_data(cell, "prevent_click"):
-			astar.add_point(next_id, cell)
+			astar.add_point(next_id, cell, 2.0)
 
 	for point_id in astar.get_point_ids():
 		var pos = astar.get_point_position(point_id)
@@ -80,6 +80,9 @@ func get_cell_custom_data(cell_pos: Vector2i, data_name: String):
 func get_navi_path(start_pos : Vector2i, end_pos : Vector2i) -> PackedVector2Array:
 	var start_id = tile_to_id(start_pos)
 	var goal_id = tile_to_id(end_pos)
+	
+	if start_id == -1 or goal_id == -1: return []
+	
 	var path_taken = astar.get_point_path(start_id, goal_id)
 	return to_local(path_taken)
 	
@@ -155,6 +158,18 @@ func get_all_tile_with_layer(custom_data_name: String, value: Variant) -> Array[
 		if get_cell_custom_data(tile, custom_data_name) == value:
 			valid_tiles.append(tile)
 	return valid_tiles
+	
+	
+func get_fuel_cost(start_pos : Vector2i, end_pos : Vector2i)-> int:
+	var start_id = tile_to_id(start_pos)
+	var goal_id = tile_to_id(end_pos)
+	var path_taken = astar.get_point_path(start_id, goal_id)
+	var total_fuel_cons = 0
+	for path_point in path_taken:
+		var point_data = get_cell_custom_data(path_point, 'fuel_cons')
+		total_fuel_cons += point_data
+		
+	return total_fuel_cons
 
 func get_front_line_points() -> Dictionary:
 	var players_territories = TerritoryManager.territories

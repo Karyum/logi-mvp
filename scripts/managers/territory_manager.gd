@@ -12,14 +12,13 @@ func _ready() -> void:
 	pass
 
 # Check if player can place factory at this position
-func can_place_factory(hex_pos: Vector2i) -> bool:
+func can_place_factory(hex_pos: Vector2i, player_id: int) -> bool:
 	# Factory already exists
 	if ProductionManager.has_factory_at(hex_pos):
 		return false
 	
 	# Player doesn't control this territory
-	if not territories.has(hex_pos) or territories[hex_pos] != NetworkManager.player_id:
-		print('false territories', not territories.has(hex_pos), territories[hex_pos], NetworkManager.player_id)
+	if not territories.has(hex_pos) or territories[hex_pos] != player_id:
 		return false
 	
 	return true

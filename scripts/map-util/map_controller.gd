@@ -29,7 +29,7 @@ func _draw():
 
 	for cell in $Ground.get_used_cells():
 		var world_pos = $Ground.map_to_local(cell)
-		draw_string(ThemeDB.fallback_font, world_pos, str(cell.x, ",", cell.y), HORIZONTAL_ALIGNMENT_CENTER, -1, 14)
+		draw_string(ThemeDB.fallback_font, world_pos, str(cell.x, ",", cell.y), HORIZONTAL_ALIGNMENT_CENTER, -1, 26)
 	
 	# for point in frontline_points:
 	if not frontline_points.is_empty():

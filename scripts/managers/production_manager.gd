@@ -15,28 +15,26 @@ var selected_factory: Factory
 
 func _ready() -> void:
 	EventBus.factory_placed.connect(_on_player_placed_factory)
+	EventBus.game_battle_turn.connect(_on_new_turn)
 	#EventBus.ui_factory_inventory_opened.connect(_on_factory_inventory_opened)
 	#EventBus.ui_factory_inventory_closed.connect(_on_factory_inventory_closed)
 
 # Called when local player places a factory (initiates network sync)
 func add_factory(player_id: int, hex_pos: Vector2i, factory_type: String):
 	# Create the factory locally first
-	_create_factory(player_id, hex_pos, factory_type)
+	if NetworkManager.is_host:
+		_create_factory(player_id, hex_pos, factory_type)
+		EventBus.factory_placed_rpc(player_id, hex_pos, factory_type)
+	else:
+		EventBus.factory_place_request_rpc_call.rpc(player_id, hex_pos, factory_type)
 	
-	# Then notify other players via network
-	EventBus.factory_placed.emit(player_id, hex_pos, factory_type)
-	EventBus.factory_placed_rpc(player_id, hex_pos, factory_type)
+	
 
 # Internal function that actually creates the factory (no network events)
 func _create_factory(player_id: int, hex_pos: Vector2i, factory_type: String):
-	# Prevent duplicate factories at the same position
-	if factories.has(hex_pos):
-		print("Factory already exists at position: ", hex_pos)
-		return
-	
 	var factory_data: Factory
 
-	match factory_type.to_upper():
+	match factory_type:
 		Factory.FactoryType.STEEL:
 			factory_data = steel_factory_data.duplicate()
 		Factory.FactoryType.ALUMINIUM:
@@ -70,16 +68,53 @@ func has_factory_at(hex_pos: Vector2i):
 	
 	
 func save_factory_layout(factory_id: Vector2i, items: Array):
-	factories[factory_id].items = items
+	if NetworkManager.is_host:
+		factories[factory_id].items = items
+		EventBus.factory_sync_items_rpc(factory_id, items)
+	else:
+		EventBus.factory_sync_items_request(factory_id, items)
 
-func get_factory_items(factory_id: Vector2i) -> Array:
-	return factories[factory_id].items
+func get_factory(factory_id: Vector2i) -> Factory:
+	return factories[factory_id]
 
 
 func find_factory_type_data(hex_pos: Vector2i) -> Factory:
 	return factories[hex_pos]
 	
+func sync_factory_items(hex_pos: Vector2i, items: Array):
+	factories[hex_pos].items = items
+	
+func sync_factories(new_factories: Dictionary[Vector2i, Factory]):
+	
+	factories = new_factories
+	EventBus.factories_updated.emit()
+	# emit signal to update UI just in case a player has the inventory opened
 
 func _on_player_placed_factory(placing_player_id: int, hex_pos: Vector2i, factory_type: String):
-	if NetworkManager.player_id != placing_player_id:
-		_create_factory(placing_player_id, hex_pos, factory_type)
+	_create_factory(placing_player_id, hex_pos, factory_type)
+
+func find_item_by_id(items: Array, target_id) -> Object:
+	for item in items:
+		if item.item_id == target_id:
+			return item
+	return null
+
+func _on_new_turn(_new_turn: int):
+	if not NetworkManager.is_host: return
+
+	for factory_pos in factories.keys():
+		var factory = factories[factory_pos] as Factory
+		
+		for item in factory.items:
+			var factory_item_data = DataHandler.find_factory_item(factory.factory_type, item.item_id) as FactoryItem
+			var item_in_storage = find_item_by_id(factory.factory_storage, item.item_id)
+			
+			if item_in_storage != null:
+				item_in_storage.amount += factory_item_data.production_rate
+			else:
+				var new_item_storage = FactoryItemStorage.new()
+				new_item_storage.item_id = item.item_id
+				new_item_storage.amount = factory_item_data.production_rate
+				factory.factory_storage.append(new_item_storage)
+	
+	EventBus.factories_sync_rpc(factories)

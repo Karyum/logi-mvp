@@ -32,13 +32,14 @@ offset_left = -4.0
 offset_top = -27.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_font_sizes/font_size = 48
 
 [node name="Label" type="Label" parent="ColorRect"]
 custom_minimum_size = Vector2(400, 200)
 layout_mode = 1
 offset_right = 40.0
 offset_bottom = 23.0
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 128
 text = "Loading..."
 horizontal_alignment = 1
 vertical_alignment = 1
